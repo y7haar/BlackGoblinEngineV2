@@ -35,6 +35,7 @@ public class Engine
         }
 
         this.mainWindow = new Window();
+        Input.init(mainWindow);
     }
 
     public void run()
@@ -46,7 +47,19 @@ public class Engine
         while(running)
         {
             this.update();
+
+            try
+            {
+                Thread.sleep(1);
+            }
+
+            catch (InterruptedException e)
+            {
+                Thread.currentThread().interrupt();
+            }
         }
+
+        this.close();
     }
 
     private void update()
@@ -78,6 +91,8 @@ public class Engine
 
     public void close()
     {
+        Input.close();
+
         this.mainWindow.close();
 
         glfwTerminate();

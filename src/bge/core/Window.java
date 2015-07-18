@@ -57,4 +57,9 @@ public class Window
     {
         glfwDestroyWindow(this.window);
     }
+
+    public long getWindowHandler()
+    {
+        return window;
+    }
 }
