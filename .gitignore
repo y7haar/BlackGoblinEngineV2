@@ -1,4 +1,3 @@
-./.idea
-
-./BlackGoblinEngine.iml
-./*.log
+.idea/*
+BlackGoblinEngine.iml
+*.log
