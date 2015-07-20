@@ -99,6 +99,18 @@ public class Vector4
         return this;
     }
 
+    public Vector4 getNormalized()
+    {
+        float length = (float) Math.sqrt(x * x + y * y + z * z + w * w);
+
+        float newX = x / length;
+        float newY = y / length;
+        float newZ = z / length;
+        float newW = w / length;
+
+        return new Vector4(newX, newY, newZ, newW);
+    }
+
     public float distance(Vector4 rhs)
     {
         float newX = rhs.x - x;

@@ -96,7 +96,7 @@ public class Engine
 
         this.updateTimeLate();
 
-        System.out.println(Time.getFps());
+        //System.out.println(Time.getFps());
     }
 
     private void updateTimeLate()

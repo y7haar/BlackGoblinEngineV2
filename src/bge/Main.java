@@ -25,7 +25,7 @@ package bge;
 import bge.core.Engine;
 import bge.core.Color;
 import bge.math.Matrix4x4;
-import bge.math.Vector2;
+import bge.math.*;
 
 /**
  * Created by Yannic Siebenhaar on 18.07.2015.
@@ -39,6 +39,12 @@ public class Main
         mat.set(2, 0, 4.0f);
 
         System.out.println(mat);
+
+        Vector3 v = new Vector3(-10.0f, 5.0f, 0.0f);
+        System.out.println(v.normalize());
+
+        Quaternion q = new Quaternion().fromEulerAngles(new Vector3(12.0f, 24.0f, 80.0f));
+        System.out.println(q);
 
         Engine engine = Engine.getInstance();
         engine.run();

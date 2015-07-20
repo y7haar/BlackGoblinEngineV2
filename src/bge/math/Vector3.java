@@ -94,6 +94,17 @@ public class Vector3
         return this;
     }
 
+    public Vector3 getNormalized()
+    {
+        float length = (float) Math.sqrt(x * x + y * y + z * z);
+
+        float newX = x / length;
+        float newY = y / length;
+        float newZ = z / length;
+
+        return new Vector3(newX, newY, newZ);
+    }
+
     public Vector3 cross(Vector3 rhs)
     {
         float newX, newY, newZ;

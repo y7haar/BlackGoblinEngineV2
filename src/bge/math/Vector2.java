@@ -89,6 +89,16 @@ public class Vector2
         return this;
     }
 
+    public Vector2 getNormalized()
+    {
+        float length = (float) Math.sqrt(x * x + y * y);
+
+        float newX = x / length;
+        float newY = y / length;
+
+        return new Vector2(newX, newY);
+    }
+
     public float distance(Vector2 rhs)
     {
         float newX = rhs.x - x;

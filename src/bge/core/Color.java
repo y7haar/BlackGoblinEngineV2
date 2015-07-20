@@ -27,16 +27,16 @@ package bge.core;
  */
 public class Color
 {
-    public static Color BLACK   = new Color(0.0f, 0.0f, 0.0f);
-    public static Color WHITE   = new Color(1.0f, 1.0f, 1.0f);
-    public static Color GREY    = new Color(0.5f, 0.5f, 0.5f);
-    public static Color BLUE    = new Color(0.0f, 0.0f, 1.0f);
-    public static Color RED     = new Color(1.0f, 0.0f, 0.0f);
-    public static Color GREEN   = new Color(0.0f, 1.0f, 0.0f);
-    public static Color YELLOW  = new Color(1.0f, 1.0f, 0.0f);
-    public static Color CYAN    = new Color(0.0f, 1.0f, 1.0f);
-    public static Color MAGENTA = new Color(1.0f, 0.0f, 1.0f);
-    public static Color CLEAR   = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+    public static final Color BLACK = new Color(0.0f, 0.0f, 0.0f);
+    public static final Color WHITE = new Color(1.0f, 1.0f, 1.0f);
+    public static final Color GREY = new Color(0.5f, 0.5f, 0.5f);
+    public static final Color BLUE = new Color(0.0f, 0.0f, 1.0f);
+    public static final Color RED = new Color(1.0f, 0.0f, 0.0f);
+    public static final Color GREEN = new Color(0.0f, 1.0f, 0.0f);
+    public static final Color YELLOW = new Color(1.0f, 1.0f, 0.0f);
+    public static final Color CYAN = new Color(0.0f, 1.0f, 1.0f);
+    public static final Color MAGENTA = new Color(1.0f, 0.0f, 1.0f);
+    public static final Color CLEAR = new Color(0.0f, 0.0f, 0.0f, 0.0f);
 
 
     private float red;
