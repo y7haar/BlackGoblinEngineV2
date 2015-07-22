@@ -32,7 +32,7 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * Created by Yannic Siebenhaar on 18.07.2015.
  */
-public class Window
+public class Window extends EngineComponent
 {
     private long window;
 
@@ -50,7 +50,7 @@ public class Window
         glfwMakeContextCurrent(this.window);
 
         //Enable VSync = 1
-        glfwSwapInterval(0);
+        glfwSwapInterval(1);
 
         glfwShowWindow(this.window);
     }
@@ -65,6 +65,14 @@ public class Window
         init(800, 600, "Window");
     }
 
+    @Override
+    public void init()
+    {
+
+    }
+
+
+    @Override
     public void update()
     {
         glfwSwapBuffers(this.window);
@@ -75,6 +83,7 @@ public class Window
         return glfwWindowShouldClose(this.window) != GL_FALSE;
     }
 
+    @Override
     public void close()
     {
         glfwDestroyWindow(this.window);

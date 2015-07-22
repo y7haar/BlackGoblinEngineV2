@@ -22,17 +22,37 @@
 
 package bge.core;
 
-import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL30.*;
 
 /**
- * Created by Yannic Siebenhaar on 18.07.2015.
+ * Created by Yannic Siebenhaar on 22.07.2015.
  */
-public class InputController
+public class RenderController extends EngineComponent
 {
-    private Window mainWindow;
 
-    public InputController(Window window)
+    @Override
+    public void init()
     {
-        this.mainWindow = window;
+        // TODO: do clearColor in Camera class
+        glClearColor(0.075f, 0.191f, 0.506f, 1.0f);
+
+        glFrontFace(GL_CW);
+        glCullFace(GL_BACK);
+        glEnable(GL_CULL_FACE);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_FRAMEBUFFER_SRGB);
+    }
+
+    @Override
+    public void update()
+    {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+
+    @Override
+    public void close()
+    {
+
     }
 }

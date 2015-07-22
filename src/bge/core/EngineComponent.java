@@ -22,17 +22,14 @@
 
 package bge.core;
 
-import static org.lwjgl.glfw.GLFW.*;
-
 /**
- * Created by Yannic Siebenhaar on 18.07.2015.
+ * Created by Yannic Siebenhaar on 22.07.2015.
  */
-public class InputController
+public abstract class EngineComponent
 {
-    private Window mainWindow;
+    public abstract void init();
 
-    public InputController(Window window)
-    {
-        this.mainWindow = window;
-    }
+    public abstract void update();
+
+    public abstract void close();
 }

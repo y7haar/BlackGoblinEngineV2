@@ -22,17 +22,33 @@
 
 package bge.core;
 
-import static org.lwjgl.glfw.GLFW.*;
+import bge.math.*;
 
 /**
- * Created by Yannic Siebenhaar on 18.07.2015.
+ * Created by Yannic Siebenhaar on 23.07.2015.
  */
-public class InputController
+public class Vertex
 {
-    private Window mainWindow;
+    public static final short SIZE = 3;
+    private Vector3 position;
 
-    public InputController(Window window)
+    public Vertex(Vector3 pos)
     {
-        this.mainWindow = window;
+        this.position = pos;
+    }
+
+    public Vertex()
+    {
+
+    }
+
+    public Vector3 getPosition()
+    {
+        return position;
+    }
+
+    public void setPosition(Vector3 position)
+    {
+        this.position = position;
     }
 }

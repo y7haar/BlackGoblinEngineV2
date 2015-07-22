@@ -20,19 +20,35 @@
  * THE SOFTWARE.
  */
 
-package bge.core;
+package bge;
 
-import static org.lwjgl.glfw.GLFW.*;
+import bge.core.Mesh;
+import bge.core.Vertex;
+import bge.math.Vector3;
 
 /**
- * Created by Yannic Siebenhaar on 18.07.2015.
+ * Created by Yannic Siebenhaar on 23.07.2015.
  */
-public class InputController
+public class TestGame
 {
-    private Window mainWindow;
+    Mesh mesh;
 
-    public InputController(Window window)
+    public TestGame()
     {
-        this.mainWindow = window;
+        mesh = new Mesh();
+
+        Vertex[] vertices = new Vertex[3];
+
+        vertices[0] = new Vertex(new Vector3(-1, -1, 0));
+        vertices[1] = new Vertex(new Vector3(0, 1, 0));
+        vertices[2] = new Vertex(new Vector3(1, -1, 0));
+
+        mesh.addVertices(vertices);
     }
+
+    public void update()
+    {
+        mesh.render();
+    }
+
 }

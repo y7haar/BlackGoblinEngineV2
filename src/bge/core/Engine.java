@@ -22,6 +22,7 @@
 
 package bge.core;
 
+import bge.TestGame;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GLContext;
 
@@ -36,11 +37,14 @@ public class Engine
 {
     private static Engine instance = new Engine();
 
+    private RenderController renderController;
+
     private GLFWErrorCallback errorCallback;
     private Window mainWindow;
     private boolean running = false;
 
-    private long frameStartTime = 0;
+    // TODO: Remove Game out of Engine
+    private TestGame game;
 
     public static Engine getInstance()
     {
@@ -56,8 +60,17 @@ public class Engine
             throw new IllegalStateException("Unable to initialize GLFW");
         }
 
+
         this.mainWindow = new Window();
+        GLContext.createFromCurrent();
         Input.init(mainWindow);
+
+        this.renderController = new RenderController();
+        this.renderController.init();
+
+
+        //TODO: Remove Game class out of Engine
+        game = new TestGame();
     }
 
     public void run()
@@ -68,7 +81,9 @@ public class Engine
 
         while(running)
         {
+            this.updateEarly();
             this.update();
+            this.updateLate();
 
             try
             {
@@ -81,43 +96,44 @@ public class Engine
             }
         }
 
-        this.close();
+        close();
     }
 
     private void update()
     {
-        running = ! this.mainWindow.shouldClose();
+        //TODO: Remove Game
+        System.out.println(Time.getFramesPerSecond());
+        game.update();
+    }
 
+    private void updateEarly()
+    {
+        Time.updateEarly();
 
-        this.updateTimeEarly();
+        Input.update();
 
+        renderController.update();
+    }
+
+    private void updateLate()
+    {
         this.mainWindow.update();
-        glfwPollEvents();
-
-        this.updateTimeLate();
-
-        //System.out.println(Time.getFps());
-    }
-
-    private void updateTimeLate()
-    {
-        Time.incrementFrameCount();
-        Time.calculateDelta(frameStartTime);
-        Time.calculateFps();
-    }
-
-    private void updateTimeEarly()
-    {
-        frameStartTime = Time.getTime();
+        Time.updateLate();
     }
 
     public void close()
     {
+        renderController.close();
         Input.close();
 
-        this.mainWindow.close();
+        mainWindow.close();
 
         glfwTerminate();
-        this.errorCallback.release();
+        errorCallback.release();
+    }
+
+    public void quit()
+    {
+        this.running = false;
     }
 }

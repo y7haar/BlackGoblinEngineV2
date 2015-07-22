@@ -22,21 +22,39 @@
 
 package bge.core;
 
+import static org.lwjgl.glfw.GLFW.*;
+
 /**
  * Created by Yannic Siebenhaar on 18.07.2015.
  */
 public class Input
 {
     private static InputController inputController;
+    private static Window window;
 
     public static void init(Window window)
     {
+        Input.window = window;
         inputController = new InputController(window);
-        inputController.start();
     }
 
     public static void close()
     {
-        inputController.close();
+
+    }
+
+    public static void update()
+    {
+        glfwPollEvents();
+
+        //TODO: Remove Hack and implement Profile for Debugging
+
+        System.out.println(window.getWindowHandler());
+
+        if (glfwGetKey(Input.window.getWindowHandler(), GLFW_KEY_ESCAPE) == 1 || Input.window.shouldClose())
+        {
+            Engine.getInstance().quit();
+        }
+
     }
 }

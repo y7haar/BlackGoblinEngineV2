@@ -28,7 +28,10 @@ package bge.core;
 public class Time
 {
     private static final long SECOND = 1000000000L;
-    private static final long START_TIME = System.nanoTime();
+    private static final long ENGINE_START_TIME = System.nanoTime();
+
+    private static long startTime = 0;
+    private static long endTime = 0;
 
     private static double delta = 0;
     private static long frameCount = 0;
@@ -37,7 +40,7 @@ public class Time
 
     public static long getTime()
     {
-        return System.nanoTime() - START_TIME;
+        return System.nanoTime() - ENGINE_START_TIME;
     }
 
     public static double getDelta()
@@ -45,17 +48,7 @@ public class Time
         return Time.delta;
     }
 
-    public static void calculateDelta(long startTime)
-    {
-        Time.delta = Time.getTime() - startTime;
-    }
-
-    public static void calculateFps()
-    {
-        Time.fps = Time.SECOND / Time.delta;
-    }
-
-    public static double getFps()
+    public static double getFramesPerSecond()
     {
         return fps;
     }
@@ -65,8 +58,20 @@ public class Time
         return frameCount;
     }
 
-    public static void incrementFrameCount()
+
+    public static void updateEarly()
     {
+        startTime = Time.getTime();
+    }
+
+    public static void updateLate()
+    {
+        endTime = Time.getTime();
+
+        Time.delta = endTime - startTime;
+        Time.fps = Time.SECOND / Time.delta;
+
         Time.frameCount++;
     }
+
 }
