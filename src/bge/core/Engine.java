@@ -71,6 +71,7 @@ public class Engine
 
         //TODO: Remove Game class out of Engine
         game = new TestGame();
+
     }
 
     public void run()
@@ -84,16 +85,6 @@ public class Engine
             this.updateEarly();
             this.update();
             this.updateLate();
-
-            try
-            {
-                Thread.sleep(1);
-            }
-
-            catch (InterruptedException e)
-            {
-                Thread.currentThread().interrupt();
-            }
         }
 
         close();
@@ -103,6 +94,7 @@ public class Engine
     {
         //TODO: Remove Game
         System.out.println(Time.getFramesPerSecond());
+        mainWindow.setTitle("BlackGoblinEngine     " + (int) Time.getFramesPerSecond() + " Frames");
         game.update();
     }
 

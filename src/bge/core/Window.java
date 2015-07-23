@@ -89,8 +89,13 @@ public class Window extends EngineComponent
         glfwDestroyWindow(this.window);
     }
 
-    public long getWindowHandler()
+    public long getWindowHandle()
     {
         return window;
+    }
+
+    public void setTitle(String title)
+    {
+        glfwSetWindowTitle(window, title);
     }
 }

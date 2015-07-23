@@ -20,41 +20,47 @@
  * THE SOFTWARE.
  */
 
-package bge;
+package bge.core;
 
-import bge.core.*;
-import bge.math.*;
+import static org.lwjgl.opengl.GL20.*;
 
 /**
  * Created by Yannic Siebenhaar on 23.07.2015.
  */
-public class TestGame
+public class FragmentShader
 {
-    Mesh mesh;
-    ShaderLoader sl;
-    Shader shader;
+    private String source;
+    private int handle;
 
-    public TestGame()
+    public FragmentShader(String source)
     {
-        mesh = new Mesh();
-        sl = new ShaderLoader();
-        shader = sl.loadShaderDirectory("game/shader/basic");
+        this.source = source;
+    }
 
-        Vertex[] vertices = new Vertex[3];
+    public void compile()
+    {
+        handle = glCreateShader(GL_FRAGMENT_SHADER);
 
-        vertices[0] = new Vertex(new Vector3(-1, -1, 0));
-        vertices[1] = new Vertex(new Vector3(0, 1, 0));
-        vertices[2] = new Vertex(new Vector3(1, -1, 0));
+        if (handle == 0)
+        {
+            //TODO: Throw Exception or something else
+        }
 
-        mesh.addVertices(vertices);
-        shader.prepare();
+        glShaderSource(handle, source);
+        glCompileShader(handle);
+
+        if (glGetShaderi(handle, GL_COMPILE_STATUS) == 0)
+        {
+            System.err.println("FragmentShader could not be compiled");
+            System.err.println(glGetShaderInfoLog(handle));
+            //TODO: Exception, Shader did not compile
+        }
+
 
     }
 
-    public void update()
+    public int getShaderHandle()
     {
-        shader.bind();
-        mesh.render();
+        return this.handle;
     }
-
 }

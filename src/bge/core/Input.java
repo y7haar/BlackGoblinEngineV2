@@ -49,9 +49,7 @@ public class Input
 
         //TODO: Remove Hack and implement Profile for Debugging
 
-        System.out.println(window.getWindowHandler());
-
-        if (glfwGetKey(Input.window.getWindowHandler(), GLFW_KEY_ESCAPE) == 1 || Input.window.shouldClose())
+        if (glfwGetKey(Input.window.getWindowHandle(), GLFW_KEY_ESCAPE) == 1 || Input.window.shouldClose())
         {
             Engine.getInstance().quit();
         }
