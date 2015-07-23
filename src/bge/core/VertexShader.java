@@ -1,0 +1,69 @@
+/*
+ * Copyright (c) 2015 Yannic Siebenhaar
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+package bge.core;
+
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL20.GL_COMPILE_STATUS;
+import static org.lwjgl.opengl.GL20.glGetShaderi;
+
+/**
+ * Created by Yannic Siebenhaar on 23.07.2015.
+ */
+public class VertexShader
+{
+    private String source;
+    private int handle;
+
+    public VertexShader(String source)
+    {
+        this.source = source;
+    }
+
+    public void compile()
+    {
+        handle = glCreateShader(GL_VERTEX_SHADER);
+
+        if (handle == 0)
+        {
+            System.err.println("Shader creation failed");
+            //TODO: Throw Exception or something else
+        }
+
+        glShaderSource(handle, source);
+        glCompileShader(handle);
+
+        if (glGetShaderi(handle, GL_COMPILE_STATUS) == 0)
+        {
+            System.err.println("VertexShader could not be compiled");
+            System.err.println(glGetShaderInfoLog(handle));
+            //TODO: Exception, Shader did not compile
+        }
+
+
+    }
+
+    public int getShaderHandle()
+    {
+        return this.handle;
+    }
+}
