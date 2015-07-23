@@ -22,64 +22,66 @@
 
 package bge.math;
 
+import org.lwjgl.BufferUtils;
+
+import java.nio.FloatBuffer;
+
 /**
  * Created by Yannic Siebenhaar on 20.07.2015.
  */
 public class Matrix4x4
 {
-    public float[][] elements;
+    private float[][] mat;
 
     public Matrix4x4(float[][] elements)
     {
-        this.elements = elements;
+        this.mat = elements;
     }
 
     public Matrix4x4()
     {
-        this.elements = new float[4][4];
-    }
-
-    public float[][] getElements()
-    {
-        return elements;
-    }
-
-    public void setElements(float[][] elements)
-    {
-        this.elements = elements;
+        this.mat = new float[4][4];
+        identity();
     }
 
     public float get(int x, int y)
     {
-        return elements[x][y];
+        return mat[x][y];
     }
 
     public void set(int x, int y, float value)
     {
-        elements[x][y] = value;
+        mat[x][y] = value;
+    }
+
+    public float[][] getElements()
+    {
+        return mat;
+    }
+
+    public void setElements(float[][] elements)
+    {
+        this.mat = elements;
     }
 
     public Matrix4x4 identity()
     {
-        elements[0][0] = 1.0f;
-        elements[0][1] = 0.0f;
-        elements[0][2] = 0.0f;
-        elements[0][3] = 0.0f;
-
-        elements[1][0] = 0.0f;
-        elements[1][1] = 1.0f;
-        elements[1][2] = 0.0f;
-        elements[1][3] = 0.0f;
-
-        elements[2][0] = 0.0f;
-        elements[2][1] = 0.0f;
-        elements[2][2] = 1.0f;
-        elements[2][3] = 0.0f;
-
-        elements[3][0] = 0.0f;
-        elements[3][1] = 0.0f;
-        elements[3][2] = 0.0f;
-        elements[3][3] = 1.0f;
+        mat[0][0] = 1.0f;
+        mat[0][1] = 0.0f;
+        mat[0][2] = 0.0f;
+        mat[0][3] = 0.0f;
+        mat[1][0] = 0.0f;
+        mat[1][1] = 1.0f;
+        mat[1][2] = 0.0f;
+        mat[1][3] = 0.0f;
+        mat[2][0] = 0.0f;
+        mat[2][1] = 0.0f;
+        mat[2][2] = 1.0f;
+        mat[2][3] = 0.0f;
+        mat[3][0] = 0.0f;
+        mat[3][1] = 0.0f;
+        mat[3][2] = 0.0f;
+        mat[3][3] = 1.0f;
 
         return this;
     }
@@ -88,25 +90,25 @@ public class Matrix4x4
     {
         float[][] newMat = new float[4][4];
 
-        newMat[0][0] = elements[0][0] + rhs.elements[0][0];
-        newMat[0][1] = elements[0][1] + rhs.elements[0][1];
-        newMat[0][2] = elements[0][2] + rhs.elements[0][2];
-        newMat[0][3] = elements[0][3] + rhs.elements[0][3];
+        newMat[0][0] = mat[0][0] + rhs.mat[0][0];
+        newMat[0][1] = mat[0][1] + rhs.mat[0][1];
+        newMat[0][2] = mat[0][2] + rhs.mat[0][2];
+        newMat[0][3] = mat[0][3] + rhs.mat[0][3];
 
-        newMat[1][0] = elements[1][0] + rhs.elements[1][0];
-        newMat[1][1] = elements[1][1] + rhs.elements[1][1];
-        newMat[1][2] = elements[1][2] + rhs.elements[1][2];
-        newMat[1][3] = elements[1][3] + rhs.elements[1][3];
+        newMat[1][0] = mat[1][0] + rhs.mat[1][0];
+        newMat[1][1] = mat[1][1] + rhs.mat[1][1];
+        newMat[1][2] = mat[1][2] + rhs.mat[1][2];
+        newMat[1][3] = mat[1][3] + rhs.mat[1][3];
 
-        newMat[2][0] = elements[2][0] + rhs.elements[2][0];
-        newMat[2][1] = elements[2][1] + rhs.elements[2][1];
-        newMat[2][2] = elements[2][2] + rhs.elements[2][2];
-        newMat[2][3] = elements[2][3] + rhs.elements[2][3];
+        newMat[2][0] = mat[2][0] + rhs.mat[2][0];
+        newMat[2][1] = mat[2][1] + rhs.mat[2][1];
+        newMat[2][2] = mat[2][2] + rhs.mat[2][2];
+        newMat[2][3] = mat[2][3] + rhs.mat[2][3];
 
-        newMat[3][0] = elements[3][0] + rhs.elements[3][0];
-        newMat[3][1] = elements[3][1] + rhs.elements[3][1];
-        newMat[3][2] = elements[3][2] + rhs.elements[3][2];
-        newMat[3][3] = elements[3][3] + rhs.elements[3][3];
+        newMat[3][0] = mat[3][0] + rhs.mat[3][0];
+        newMat[3][1] = mat[3][1] + rhs.mat[3][1];
+        newMat[3][2] = mat[3][2] + rhs.mat[3][2];
+        newMat[3][3] = mat[3][3] + rhs.mat[3][3];
 
         return new Matrix4x4(newMat);
     }
@@ -117,37 +119,139 @@ public class Matrix4x4
 
         for(int i = 0;i < 4;++i)
         {
-            newMat[i][0] =  (elements[i][0] * rhs.elements[0][i]) +
-                            (elements[i][1] * rhs.elements[1][i]) +
-                            (elements[i][2] * rhs.elements[2][i]) +
-                            (elements[i][3] * rhs.elements[3][i]);
+            newMat[i][0] = (mat[i][0] * rhs.mat[0][0]) +
+                    (mat[i][1] * rhs.mat[1][0]) +
+                    (mat[i][2] * rhs.mat[2][0]) +
+                    (mat[i][3] * rhs.mat[3][0]);
 
-            newMat[i][1] =  (elements[i][0] * rhs.elements[0][i]) +
-                            (elements[i][1] * rhs.elements[1][i]) +
-                            (elements[i][2] * rhs.elements[2][i]) +
-                            (elements[i][3] * rhs.elements[3][i]);
+            newMat[i][1] = (mat[i][0] * rhs.mat[0][1]) +
+                    (mat[i][1] * rhs.mat[1][1]) +
+                    (mat[i][2] * rhs.mat[2][1]) +
+                    (mat[i][3] * rhs.mat[3][1]);
 
-            newMat[i][2] =  (elements[i][0] * rhs.elements[0][i]) +
-                            (elements[i][1] * rhs.elements[1][i]) +
-                            (elements[i][2] * rhs.elements[2][i]) +
-                            (elements[i][3] * rhs.elements[3][i]);
+            newMat[i][2] = (mat[i][0] * rhs.mat[0][2]) +
+                    (mat[i][1] * rhs.mat[1][2]) +
+                    (mat[i][2] * rhs.mat[2][2]) +
+                    (mat[i][3] * rhs.mat[3][2]);
 
-            newMat[i][3] =  (elements[i][0] * rhs.elements[0][i]) +
-                            (elements[i][1] * rhs.elements[1][i]) +
-                            (elements[i][2] * rhs.elements[2][i]) +
-                            (elements[i][3] * rhs.elements[3][i]);
+            newMat[i][3] = (mat[i][0] * rhs.mat[0][3]) +
+                    (mat[i][1] * rhs.mat[1][3]) +
+                    (mat[i][2] * rhs.mat[2][3]) +
+                    (mat[i][3] * rhs.mat[3][3]);
         }
 
         return new Matrix4x4(newMat);
     }
 
+    public Matrix4x4 getTranslation(Vector3 translation)
+    {
+        mat[0][0] = 1.0f;
+        mat[0][1] = 0.0f;
+        mat[0][2] = 0.0f;
+        mat[0][3] = translation.x;
+        mat[1][0] = 0.0f;
+        mat[1][1] = 1.0f;
+        mat[1][2] = 0.0f;
+        mat[1][3] = translation.y;
+        mat[2][0] = 0.0f;
+        mat[2][1] = 0.0f;
+        mat[2][2] = 1.0f;
+        mat[2][3] = translation.z;
+        mat[3][0] = 0.0f;
+        mat[3][1] = 0.0f;
+        mat[3][2] = 0.0f;
+        mat[3][3] = 1.0f;
+
+        return this;
+    }
+
+    public Matrix4x4 getRotation(Quaternion rotation)
+    {
+        float xx2 = 2 * (rotation.x * rotation.x);
+        float yy2 = 2 * (rotation.y * rotation.y);
+        float zz2 = 2 * (rotation.z * rotation.z);
+
+        float xy2 = 2 * rotation.x * rotation.y;
+        float xz2 = 2 * rotation.x * rotation.z;
+        ;
+
+        float yz2 = 2 * rotation.y * rotation.z;
+        ;
+
+        float wx2 = 2 * rotation.w * rotation.x;
+        ;
+        float wy2 = 2 * rotation.w * rotation.y;
+        ;
+        float wz2 = 2 * rotation.w * rotation.z;
+        ;
+
+
+        mat[0][0] = 1 - yy2 - zz2;
+        mat[0][1] = xy2 + wz2;
+        mat[0][2] = xz2 - wy2;
+        mat[0][3] = mat[0][3];
+        mat[1][0] = xy2 - wz2;
+        mat[1][1] = 1 - xx2 - zz2;
+        mat[1][2] = yz2 + wx2;
+        mat[1][3] = mat[1][3];
+        mat[2][0] = xz2 + wy2;
+        mat[2][1] = yz2 - wx2;
+        mat[2][2] = 1 - xx2 - yy2;
+        mat[2][3] = mat[2][3];
+        mat[3][0] = 0;
+        mat[3][1] = 0;
+        mat[3][2] = 0;
+        mat[3][3] = 1;
+
+        //TODO: Remove last column if possible
+
+        return this;
+    }
+
+    public Matrix4x4 getScaling(Vector3 scaling)
+    {
+        mat[0][0] = scaling.x;
+        mat[0][1] = 0.0f;
+        mat[0][2] = 0.0f;
+        mat[0][3] = 0.0f;
+        mat[1][0] = 0.0f;
+        mat[1][1] = scaling.y;
+        mat[1][2] = 0.0f;
+        mat[1][3] = 0.0f;
+        mat[2][0] = 0.0f;
+        mat[2][1] = 0.0f;
+        mat[2][2] = scaling.z;
+        mat[2][3] = 0.0f;
+        mat[3][0] = 0.0f;
+        mat[3][1] = 0.0f;
+        mat[3][2] = 0.0f;
+        mat[3][3] = 1.0f;
+
+        return this;
+    }
+
+    public FloatBuffer toFloatBuffer()
+    {
+        FloatBuffer buffer = BufferUtils.createFloatBuffer(4 * 4);
+
+        for (int i = 0; i < 4; ++i)
+        {
+            for (int j = 0; j < 4; ++j)
+            {
+                buffer.put(mat[i][j]);
+            }
+        }
+
+        buffer.flip();
+        return buffer;
+    }
 
     public String toString()
     {
-        String x = "Matrix4x4:\t(" + elements[0][0] + ", " + elements[0][1] + ", " + elements[0][2] + ", " + elements[0][3] + ")\n";
-        String y =       "\t\t\t(" + elements[1][0] + ", " + elements[1][1] + ", " + elements[1][2] + ", " + elements[1][3] + ")\n";
-        String z =       "\t\t\t(" + elements[2][0] + ", " + elements[2][1] + ", " + elements[2][2] + ", " + elements[2][3] + ")\n";
-        String w =       "\t\t\t(" + elements[3][0] + ", " + elements[3][1] + ", " + elements[3][2] + ", " + elements[3][3] + ")";
+        String x = "Matrix4x4:\t(" + mat[0][0] + ", " + mat[0][1] + ", " + mat[0][2] + ", " + mat[0][3] + ")\n";
+        String y = "\t\t\t(" + mat[1][0] + ", " + mat[1][1] + ", " + mat[1][2] + ", " + mat[1][3] + ")\n";
+        String z = "\t\t\t(" + mat[2][0] + ", " + mat[2][1] + ", " + mat[2][2] + ", " + mat[2][3] + ")\n";
+        String w = "\t\t\t(" + mat[3][0] + ", " + mat[3][1] + ", " + mat[3][2] + ", " + mat[3][3] + ")";
 
         return x + y + z + w;
     }

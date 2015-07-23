@@ -22,8 +22,12 @@
 
 package bge;
 
+import bge.components.Transform;
 import bge.core.*;
 import bge.math.*;
+import bge.rendering.Mesh;
+import bge.rendering.Shader;
+import bge.rendering.Vertex;
 
 /**
  * Created by Yannic Siebenhaar on 23.07.2015.
@@ -33,6 +37,10 @@ public class TestGame
     Mesh mesh;
     ShaderLoader sl;
     Shader shader;
+    Transform transform;
+    Transform t2;
+    float newX = 0.0f;
+    float newY = 0.0f;
 
     public TestGame()
     {
@@ -46,15 +54,32 @@ public class TestGame
         vertices[1] = new Vertex(new Vector3(0, 1, 0));
         vertices[2] = new Vertex(new Vector3(1, -1, 0));
 
+        transform = new Transform();
+        t2 = new Transform();
+
         mesh.addVertices(vertices);
+
         shader.prepare();
+        shader.addUniform("transform");
 
     }
 
     public void update()
     {
+        newX += 0.5f * Time.getDelta();
+        newY += 0.5f * Time.getDelta();
+
+        System.out.println("DELTA  " + Time.getDelta());
+
+        //transform.scale(new Vector3(-0.01f, -0.01f, -0.01f));
+        transform.setPosition(new Vector3((float) Math.sin(newX), (float) Math.cos(newY), 0));
+        //transform.translate(new Vector3(-0.1f, 0.0f, 0));
+        //transform.setRotation(new Quaternion().fromEulerAngles(new Vector3(newY, newY, newX)));
+        transform.rotate(new Vector3(0, 0, 10f * Time.getDelta()));
+
         shader.bind();
         mesh.render();
+        shader.setUniform("transform", transform.getTransformMatrix());
     }
 
 }

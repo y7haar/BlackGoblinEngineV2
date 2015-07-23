@@ -23,6 +23,7 @@
 package bge.core;
 
 import bge.TestGame;
+import bge.rendering.RenderController;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GLContext;
 
@@ -60,6 +61,19 @@ public class Engine
             throw new IllegalStateException("Unable to initialize GLFW");
         }
 
+        glfwDefaultWindowHints();
+        glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+
+
+        //TODO: Replace Hack for Mac with own Factory or something alike
+        if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0)
+        {
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+        }
+
 
         this.mainWindow = new Window();
         GLContext.createFromCurrent();
@@ -93,7 +107,6 @@ public class Engine
     private void update()
     {
         //TODO: Remove Game
-        System.out.println(Time.getFramesPerSecond());
         mainWindow.setTitle("BlackGoblinEngine     " + (int) Time.getFramesPerSecond() + " Frames");
         game.update();
     }

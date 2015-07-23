@@ -20,39 +20,32 @@
  * THE SOFTWARE.
  */
 
-package bge.core;
-
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL30.*;
+package bge.components;
 
 /**
- * Created by Yannic Siebenhaar on 22.07.2015.
+ * Created by Yannic Siebenhaar on 23.07.2015.
  */
-public class RenderController extends EngineComponent
+public abstract class Component
 {
+    private GameObject gameObject;
 
-    @Override
-    public void init()
+    public Component(GameObject gameObject)
     {
-        // TODO: do clearColor in Camera class
-        glClearColor(0.075f, 0.191f, 0.506f, 1.0f);
-
-        glFrontFace(GL_CW);
-        glCullFace(GL_BACK);
-        glEnable(GL_CULL_FACE);
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_FRAMEBUFFER_SRGB);
+        this.gameObject = gameObject;
     }
 
-    @Override
-    public void update()
+    public Component()
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        this.gameObject = null;
     }
 
-    @Override
-    public void close()
+    public void setGameObject(GameObject gameObject)
     {
+        this.gameObject = gameObject;
+    }
 
+    public GameObject getGameObject()
+    {
+        return this.gameObject;
     }
 }

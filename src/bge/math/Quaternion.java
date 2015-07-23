@@ -96,14 +96,14 @@ public class Quaternion
     public Quaternion fromAngleAxis(float angle, Vector3 axis)
     {
         Vector3 axisNorm = axis.getNormalized();
-        angle = (float) Math.toRadians(angle);
+        angle = (float) Math.toRadians(angle) / 2.0f;
 
-        float sinus = (float) Math.sin(angle / 2);
+        float sinus = (float) Math.sin(angle);
 
         x = axisNorm.x * sinus;
         y = axisNorm.y * sinus;
         z = axisNorm.z * sinus;
-        w = (float) Math.cos(angle / 2);
+        w = (float) Math.cos(angle);
 
         return this;
     }
@@ -112,22 +112,30 @@ public class Quaternion
     {
         // Degree to Radiant
 
-        float xRad = (float) Math.toRadians(euler.x);
-        float yRad = (float) Math.toRadians(euler.y);
-        float zRad = (float) Math.toRadians(euler.z);
+        final float xRad2 = (float) Math.toRadians(euler.x) / 2.0f;
+        final float yRad2 = (float) Math.toRadians(euler.y) / 2.0f;
+        final float zRad2 = (float) Math.toRadians(euler.z) / 2.0f;
 
-        float cos1 = (float) Math.cos(xRad / 2);
-        float cos2 = (float) Math.cos(yRad / 2);
-        float cos3 = (float) Math.cos(zRad / 2);
+        final float cos1 = (float) Math.cos(xRad2);
+        final float cos2 = (float) Math.cos(yRad2);
+        final float cos3 = (float) Math.cos(zRad2);
 
-        float sin1 = (float) Math.sin(xRad / 2);
-        float sin2 = (float) Math.sin(yRad / 2);
-        float sin3 = (float) Math.sin(zRad / 2);
+        final float sin1 = (float) Math.sin(xRad2);
+        final float sin2 = (float) Math.sin(yRad2);
+        final float sin3 = (float) Math.sin(zRad2);
 
+        /*
         w = (cos1 * cos2 * cos3 - sin1 * sin2 * sin3);
         x = (sin1 * sin2 * cos3 + cos1 * cos2 * sin3);
         y = (sin1 * cos2 * cos3 + cos1 * sin2 * sin3);
         z = (cos1 * sin2 * cos3 - sin1 * cos2 * sin3);
+        */
+
+
+        w = (cos1 * cos2 * cos3 - sin1 * sin2 * sin3);
+        x = (sin1 * sin2 * cos3 + cos1 * cos2 * sin3);
+        z = (sin1 * cos2 * cos3 + cos1 * sin2 * sin3);
+        y = (cos1 * sin2 * cos3 - sin1 * cos2 * sin3);
 
         return this;
     }

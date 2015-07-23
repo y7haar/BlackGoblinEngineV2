@@ -20,58 +20,35 @@
  * THE SOFTWARE.
  */
 
-package bge.core;
+package bge.rendering;
+
+import bge.math.*;
 
 /**
- * Created by Yannic Siebenhaar on 18.07.2015.
+ * Created by Yannic Siebenhaar on 23.07.2015.
  */
-public class Time
+public class Vertex
 {
-    private static final long SECOND = 1000000000L;
-    private static final long ENGINE_START_TIME = System.nanoTime();
+    public static final short SIZE = 3;
+    private Vector3 position;
 
-    private static double startTime = 0;
-    private static double endTime = 0;
-
-    private static double delta = 0;
-    private static long frameCount = 0;
-    private static double fps = 0;
-
-
-    public static double getTime()
+    public Vertex(Vector3 pos)
     {
-        return (double) (System.nanoTime() - ENGINE_START_TIME) / (double) SECOND;
+        this.position = pos;
     }
 
-    public static float getDelta()
+    public Vertex()
     {
-        return (float) Time.delta;
+
     }
 
-    public static double getFramesPerSecond()
+    public Vector3 getPosition()
     {
-        return fps;
+        return position;
     }
 
-    public static long getFrameCount()
+    public void setPosition(Vector3 position)
     {
-        return frameCount;
+        this.position = position;
     }
-
-
-    public static void updateEarly()
-    {
-        startTime = Time.getTime();
-    }
-
-    public static void updateLate()
-    {
-        endTime = Time.getTime();
-
-        Time.delta = (endTime - startTime);
-        Time.fps = 1 / Time.delta;
-
-        Time.frameCount++;
-    }
-
 }

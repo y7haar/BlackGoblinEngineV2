@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-package bge.core;
+package bge.rendering;
 
 import java.nio.FloatBuffer;
 

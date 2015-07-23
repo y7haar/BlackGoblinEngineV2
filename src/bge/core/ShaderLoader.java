@@ -22,6 +22,10 @@
 
 package bge.core;
 
+import bge.rendering.FragmentShader;
+import bge.rendering.Shader;
+import bge.rendering.VertexShader;
+
 import java.io.*;
 
 /**
@@ -29,27 +33,32 @@ import java.io.*;
  */
 public class ShaderLoader
 {
-    private static final String VERTEX_EXTENSION = "vs";
-    private static final String FRAGMENT_EXTENSION = "fs";
+    private static final String VERTEX_EXTENSION = ".vs";
+    private static final String FRAGMENT_EXTENSION = ".fs";
 
+    private static final String DEFAULT_SHADER_DIRECTORY = "game/shader/default";
+    private static Shader DEFAULT_SHADER = null;
 
     public Shader loadShaderDirectory(String directory)
     {
         Shader shader = new Shader();
 
+        // Shader must have same fileName as parent folder
+        String splits[] = directory.split("/");
+        String name = splits[splits.length - 1];
+
         File dir = new File(directory);
 
-        System.out.println(dir.getAbsolutePath());
 
         File files[] = dir.listFiles();
 
         for (File f : files)
         {
-            if (f.getName().endsWith(VERTEX_EXTENSION))
+            if (f.getName().endsWith(name + VERTEX_EXTENSION))
             {
                 VertexShader vertexShader = loadVertexShader(f.getPath());
                 shader.setVertexShader(vertexShader);
-            } else if (f.getName().endsWith(FRAGMENT_EXTENSION))
+            } else if (f.getName().endsWith(name + FRAGMENT_EXTENSION))
             {
                 FragmentShader fragmentShader = loadFragmentShader(f.getPath());
                 shader.setFragmentShader(fragmentShader);
@@ -57,6 +66,16 @@ public class ShaderLoader
         }
 
         return shader;
+    }
+
+    public Shader getDefaultShader()
+    {
+        if (ShaderLoader.DEFAULT_SHADER == null)
+        {
+            ShaderLoader.DEFAULT_SHADER = loadShaderDirectory(DEFAULT_SHADER_DIRECTORY);
+        }
+
+        return ShaderLoader.DEFAULT_SHADER;
     }
 
     public VertexShader loadVertexShader(String directory)

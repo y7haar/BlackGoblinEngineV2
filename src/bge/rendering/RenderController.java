@@ -20,50 +20,41 @@
  * THE SOFTWARE.
  */
 
-package bge.core;
+package bge.rendering;
 
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL20.GL_COMPILE_STATUS;
-import static org.lwjgl.opengl.GL20.glGetShaderi;
+import bge.core.EngineComponent;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL30.*;
 
 /**
- * Created by Yannic Siebenhaar on 23.07.2015.
+ * Created by Yannic Siebenhaar on 22.07.2015.
  */
-public class VertexShader
+public class RenderController extends EngineComponent
 {
-    private String source;
-    private int handle;
 
-    public VertexShader(String source)
+    @Override
+    public void init()
     {
-        this.source = source;
+        // TODO: do clearColor in Camera class
+        glClearColor(0.075f, 0.191f, 0.506f, 1.0f);
+
+        glFrontFace(GL_CW);
+        glCullFace(GL_BACK);
+        glEnable(GL_CULL_FACE);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_FRAMEBUFFER_SRGB);
     }
 
-    public void compile()
+    @Override
+    public void update()
     {
-        handle = glCreateShader(GL_VERTEX_SHADER);
-
-        if (handle == 0)
-        {
-            System.err.println("Shader creation failed");
-            //TODO: Throw Exception or something else
-        }
-
-        glShaderSource(handle, source);
-        glCompileShader(handle);
-
-        if (glGetShaderi(handle, GL_COMPILE_STATUS) == 0)
-        {
-            System.err.println("VertexShader could not be compiled");
-            System.err.println(glGetShaderInfoLog(handle));
-            //TODO: Exception, Shader did not compile
-        }
-
-
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public int getShaderHandle()
+    @Override
+    public void close()
     {
-        return this.handle;
+
     }
 }

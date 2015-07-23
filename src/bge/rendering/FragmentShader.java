@@ -20,47 +20,18 @@
  * THE SOFTWARE.
  */
 
-package bge.core;
+package bge.rendering;
 
 import static org.lwjgl.opengl.GL20.*;
 
 /**
  * Created by Yannic Siebenhaar on 23.07.2015.
  */
-public class FragmentShader
+public class FragmentShader extends ShaderPart
 {
-    private String source;
-    private int handle;
-
     public FragmentShader(String source)
     {
-        this.source = source;
-    }
-
-    public void compile()
-    {
-        handle = glCreateShader(GL_FRAGMENT_SHADER);
-
-        if (handle == 0)
-        {
-            //TODO: Throw Exception or something else
-        }
-
-        glShaderSource(handle, source);
-        glCompileShader(handle);
-
-        if (glGetShaderi(handle, GL_COMPILE_STATUS) == 0)
-        {
-            System.err.println("FragmentShader could not be compiled");
-            System.err.println(glGetShaderInfoLog(handle));
-            //TODO: Exception, Shader did not compile
-        }
-
-
-    }
-
-    public int getShaderHandle()
-    {
-        return this.handle;
+        super(source);
+        this.SHADER_TYPE = GL_FRAGMENT_SHADER;
     }
 }

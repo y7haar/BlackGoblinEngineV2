@@ -20,58 +20,45 @@
  * THE SOFTWARE.
  */
 
-package bge.core;
+package bge.components;
+
+import java.util.HashMap;
 
 /**
- * Created by Yannic Siebenhaar on 18.07.2015.
+ * Created by Yannic Siebenhaar on 23.07.2015.
  */
-public class Time
+public class GameObject
 {
-    private static final long SECOND = 1000000000L;
-    private static final long ENGINE_START_TIME = System.nanoTime();
-
-    private static double startTime = 0;
-    private static double endTime = 0;
-
-    private static double delta = 0;
-    private static long frameCount = 0;
-    private static double fps = 0;
+    private HashMap<String, Component> components;
+    private Transform transform;
 
 
-    public static double getTime()
+    public GameObject()
     {
-        return (double) (System.nanoTime() - ENGINE_START_TIME) / (double) SECOND;
+        this.transform = new Transform(this);
+
+        this.components = new HashMap<>();
+        this.components.put("transform", this.transform);
     }
 
-    public static float getDelta()
+    public Transform getTransform()
     {
-        return (float) Time.delta;
+        return this.transform;
     }
 
-    public static double getFramesPerSecond()
+    public void addComponent(String key, Component component)
     {
-        return fps;
+        component.setGameObject(this);
+        components.put(key, component);
     }
 
-    public static long getFrameCount()
+    public Component getComponent(String component)
     {
-        return frameCount;
+        return components.get(component);
     }
 
-
-    public static void updateEarly()
+    public void update()
     {
-        startTime = Time.getTime();
+        // Update all components
     }
-
-    public static void updateLate()
-    {
-        endTime = Time.getTime();
-
-        Time.delta = (endTime - startTime);
-        Time.fps = 1 / Time.delta;
-
-        Time.frameCount++;
-    }
-
 }

@@ -20,58 +20,18 @@
  * THE SOFTWARE.
  */
 
-package bge.core;
+package bge.rendering;
+
+import static org.lwjgl.opengl.GL20.*;
 
 /**
- * Created by Yannic Siebenhaar on 18.07.2015.
+ * Created by Yannic Siebenhaar on 23.07.2015.
  */
-public class Time
+public class VertexShader extends ShaderPart
 {
-    private static final long SECOND = 1000000000L;
-    private static final long ENGINE_START_TIME = System.nanoTime();
-
-    private static double startTime = 0;
-    private static double endTime = 0;
-
-    private static double delta = 0;
-    private static long frameCount = 0;
-    private static double fps = 0;
-
-
-    public static double getTime()
+    public VertexShader(String source)
     {
-        return (double) (System.nanoTime() - ENGINE_START_TIME) / (double) SECOND;
+        super(source);
+        this.SHADER_TYPE = GL_VERTEX_SHADER;
     }
-
-    public static float getDelta()
-    {
-        return (float) Time.delta;
-    }
-
-    public static double getFramesPerSecond()
-    {
-        return fps;
-    }
-
-    public static long getFrameCount()
-    {
-        return frameCount;
-    }
-
-
-    public static void updateEarly()
-    {
-        startTime = Time.getTime();
-    }
-
-    public static void updateLate()
-    {
-        endTime = Time.getTime();
-
-        Time.delta = (endTime - startTime);
-        Time.fps = 1 / Time.delta;
-
-        Time.frameCount++;
-    }
-
 }

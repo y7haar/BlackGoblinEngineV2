@@ -38,10 +38,6 @@ public class Window extends EngineComponent
 
     private void init(int width, int height, String title)
     {
-        glfwDefaultWindowHints();
-        glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
-        glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-
         window = glfwCreateWindow(width, height, title, 0, 0);
 
         ByteBuffer videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
