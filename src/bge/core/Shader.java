@@ -42,8 +42,6 @@ public class Shader
     private int program;
     private ShaderPart[] shaderParts;
 
-    // TODO: Support other Shader types
-
     public Shader()
     {
         this.program = glCreateProgram();
