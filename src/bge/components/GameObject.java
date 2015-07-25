@@ -31,14 +31,16 @@ public class GameObject
 {
     private HashMap<String, Component> components;
     private Transform transform;
-
+    private Renderer renderer;
 
     public GameObject()
     {
-        this.transform = new Transform(this);
-
         this.components = new HashMap<>();
-        this.components.put("transform", this.transform);
+        this.transform = new Transform(this);
+        this.renderer = new MeshRenderer(this);
+
+        addComponent(transform);
+        addComponent(renderer);
     }
 
     public Transform getTransform()
@@ -46,10 +48,10 @@ public class GameObject
         return this.transform;
     }
 
-    public void addComponent(String key, Component component)
+    public void addComponent(Component component)
     {
         component.setGameObject(this);
-        components.put(key, component);
+        components.put(component.getName(), component);
     }
 
     public Component getComponent(String component)
@@ -57,8 +59,24 @@ public class GameObject
         return components.get(component);
     }
 
+    public Renderer getRenderer()
+    {
+        return renderer;
+    }
+
+    public void setRenderer(Renderer renderer)
+    {
+        this.renderer = renderer;
+    }
+
     public void update()
     {
-        // Update all components
+        for (Component c : components.values())
+        {
+            // Update all components
+
+            if (c.isEnabled())
+                c.update();
+        }
     }
 }

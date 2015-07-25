@@ -35,6 +35,10 @@ public class Transform extends Component
     private Quaternion rotation;
     private Vector3 scale;
 
+    private Vector3 oldPosition;
+    private Quaternion oldRotation;
+    private Vector3 oldScale;
+
     private Matrix4x4 translationMatrix;
     private Matrix4x4 rotationMatrix;
     private Matrix4x4 scalingMatrix;
@@ -42,24 +46,30 @@ public class Transform extends Component
 
     public Transform()
     {
+        this(null);
+    }
 
-        this.position = new Vector3();
-        this.rotation = new Quaternion(0, 0, 0, 1);
-        this.scale = new Vector3(1, 1, 1);
-
-        this.translationMatrix = new Matrix4x4();
-        this.rotationMatrix = new Matrix4x4();
-        this.scalingMatrix = new Matrix4x4();
-        this.transformMatrix = new Matrix4x4();
+    @Override
+    public void update()
+    {
+        // Stays probably empty
     }
 
     public Transform(GameObject gameObject)
     {
-        super(gameObject);
+        super(gameObject, "transform");
 
         this.position = new Vector3();
         this.rotation = new Quaternion(0, 0, 0, 1);
         this.scale = new Vector3(1, 1, 1);
+
+        this.oldPosition = new Vector3();
+        this.oldRotation = new Quaternion(0, 0, 0, 1);
+        this.oldScale = new Vector3(1, 1, 1);
+
+        this.translationMatrix = new Matrix4x4();
+        this.rotationMatrix = new Matrix4x4();
+        this.scalingMatrix = new Matrix4x4();
         this.transformMatrix = new Matrix4x4();
     }
 

@@ -23,16 +23,41 @@
 package bge.math;
 
 /**
+ * Class for representing a Quaternion. Quaternions are commonly used for handling rotations.
+ *
  * Created by Yannic Siebenhaar on 20.07.2015.
  */
 public class Quaternion
 {
+    /**
+     * The (imaginary) x component of a Quaternion.
+     */
     public float x;
+
+    /**
+     * The (imaginary) y component of a Quaternion.
+     */
     public float y;
+
+    /**
+     * The (imaginary) z component of a Quaternion.
+     */
+
     public float z;
+    /**
+     * The (real) w component of a Quaternion.
+     */
     public float w;
 
-    public Quaternion(float x, float y, float z, float w)
+    /**
+     * Constructs a new Quaternion with given values.
+     *
+     * @param x The (imaginary) x component of a Quaternion.
+     * @param y The (imaginary) y component of a Quaternion.
+     * @param z The (imaginary) z component of a Quaternion.
+     * @param w The (real) w component of a Quaternion.
+     */
+    public Quaternion(final float x, final float y, final float z, final float w)
     {
         this.x = x;
         this.y = y;
@@ -40,6 +65,9 @@ public class Quaternion
         this.w = w;
     }
 
+    /**
+     * Constructs a new Quaternion, all Values are set to 0.0f.
+     */
     public Quaternion()
     {
         this.x = 0.0f;
@@ -48,7 +76,15 @@ public class Quaternion
         this.w = 0.0f;
     }
 
-    public void set(float x, float y, float z, float w)
+    /**
+     * Setter method to set all values of the Quaternion. If you want to set a single value, use the public property.
+     *
+     * @param x The (imaginary) x component of a Quaternion.
+     * @param y The (imaginary) y component of a Quaternion.
+     * @param z The (imaginary) z component of a Quaternion.
+     * @param w The (real) w component of a Quaternion.
+     */
+    public void set(final float x, final float y, final float z, final float w)
     {
         this.x = x;
         this.y = y;
@@ -56,34 +92,56 @@ public class Quaternion
         this.w = w;
     }
 
-    public Quaternion mul(Quaternion rhs)
+    /**
+     * Performs a multiplication with another Quaternion. This operation returns a new Quaternion which contains the calculated data.
+     *
+     * @param rhs A Quaternion as right hand side argument.
+     * @return A new Quaternion that holds the result.
+     */
+    public Quaternion mul(final Quaternion rhs)
     {
-        float newW = w * rhs.w - x * rhs.x - y * rhs.y - z * rhs.z;
-        float newX = x * rhs.w + w * rhs.x + y * rhs.z - z * rhs.y;
-        float newY = y * rhs.w + w * rhs.y + z * rhs.x - x * rhs.z;
-        float newZ = z * rhs.w + w * rhs.z + x * rhs.y - y * rhs.x;
+        final float newW = w * rhs.w - x * rhs.x - y * rhs.y - z * rhs.z;
+        final float newX = x * rhs.w + w * rhs.x + y * rhs.z - z * rhs.y;
+        final float newY = y * rhs.w + w * rhs.y + z * rhs.x - x * rhs.z;
+        final float newZ = z * rhs.w + w * rhs.z + x * rhs.y - y * rhs.x;
 
         return new Quaternion(newX, newY, newZ, newW);
     }
 
-    public Quaternion mul(Vector3 rhs)
+    /**
+     * Performs a multiplication with a Vector3. This operation returns a new Quaternion which contains the calculated data.
+     *
+     * @param rhs A Vector3 as right hand side argument.
+     * @return A new Quaternion that holds the result.
+     */
+    public Quaternion mul(final Vector3 rhs)
     {
-        float newW = -x * rhs.x - y * rhs.y - z * rhs.z;
-        float newX = w * rhs.x + y * rhs.z - z * rhs.y;
-        float newY = w * rhs.y + z * rhs.x - x * rhs.z;
-        float newZ = w * rhs.z + x * rhs.y - y * rhs.x;
+        final float newW = -x * rhs.x - y * rhs.y - z * rhs.z;
+        final float newX = w * rhs.x + y * rhs.z - z * rhs.y;
+        final float newY = w * rhs.y + z * rhs.x - x * rhs.z;
+        final float newZ = w * rhs.z + x * rhs.y - y * rhs.x;
 
         return new Quaternion(newX, newY, newZ, newW);
     }
 
+    /**
+     * Calculates the length of the Quaternion and returns the result as floating point number.
+     *
+     * @return The length of the Quaternion.
+     */
     public float length()
     {
         return (float) Math.sqrt(x * x + y * y + z * z + w * w);
     }
 
+    /**
+     * Normalizes the Quaternion. Normalizing means dividing all components (x, y, z, w) by the length of a Quaternion.
+     * This Operation affects the Quaternion and changes data.
+     * @return The updated instance.
+     */
     public Quaternion normalize()
     {
-        float length = (float) Math.sqrt(x * x + y * y + z * z + w * w);
+        final float length = (float) Math.sqrt(x * x + y * y + z * z + w * w);
 
         x /= length;
         y /= length;
@@ -93,12 +151,19 @@ public class Quaternion
         return this;
     }
 
-    public Quaternion fromAngleAxis(float angle, Vector3 axis)
+    /**
+     * Converts a rotation around angle axis into a Quaternion. This Operation affects the Quaternion and changes data.
+     *
+     * @param angle The rotation in degrees around the axis.
+     * @param axis  The axis as Vector3 to rotate around.
+     * @return The updated instance.
+     */
+    public Quaternion fromAngleAxis(float angle, final Vector3 axis)
     {
-        Vector3 axisNorm = axis.getNormalized();
+        final Vector3 axisNorm = axis.getNormalized();
         angle = (float) Math.toRadians(angle) / 2.0f;
 
-        float sinus = (float) Math.sin(angle);
+        final float sinus = (float) Math.sin(angle);
 
         x = axisNorm.x * sinus;
         y = axisNorm.y * sinus;
@@ -108,7 +173,13 @@ public class Quaternion
         return this;
     }
 
-    public Quaternion fromEulerAngles(Vector3 euler)
+    /**
+     * Converts a rotation from euler angles into a Quaternion. This Operation affects the Quaternion and changes data.
+     *
+     * @param euler A Vector3 which represents an euler rotation
+     * @return The updated instance.
+     */
+    public Quaternion fromEulerAngles(final Vector3 euler)
     {
         // Degree to Radiant
 
@@ -124,23 +195,18 @@ public class Quaternion
         final float sin2 = (float) Math.sin(yRad2);
         final float sin3 = (float) Math.sin(zRad2);
 
-        /*
         w = (cos1 * cos2 * cos3 - sin1 * sin2 * sin3);
         x = (sin1 * sin2 * cos3 + cos1 * cos2 * sin3);
-        y = (sin1 * cos2 * cos3 + cos1 * sin2 * sin3);
-        z = (cos1 * sin2 * cos3 - sin1 * cos2 * sin3);
-        */
-
-
-        w = (cos1 * cos2 * cos3 - sin1 * sin2 * sin3);
-        x = (sin1 * sin2 * cos3 + cos1 * cos2 * sin3);
-        z = (sin1 * cos2 * cos3 + cos1 * sin2 * sin3);
         y = (cos1 * sin2 * cos3 - sin1 * cos2 * sin3);
+        z = (sin1 * cos2 * cos3 + cos1 * sin2 * sin3);
 
         return this;
     }
 
-
+    /**
+     * Converts Quaternion into a String. Useful for debugging.
+     * @return The converted String.
+     */
     public String toString()
     {
         return "Quaternion: (" + this.x + "), (" + this.y + "), (" + this.z + "), (" + this.w + ")";

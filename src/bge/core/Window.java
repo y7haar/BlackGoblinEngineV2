@@ -22,6 +22,7 @@
 
 package bge.core;
 
+import bge.components.EngineComponent;
 import org.lwjgl.glfw.*;
 
 import java.nio.ByteBuffer;
@@ -35,12 +36,13 @@ import static org.lwjgl.opengl.GL11.*;
 public class Window extends EngineComponent
 {
     private long window;
+    private ByteBuffer videoMode;
 
-    private void init(int width, int height, String title)
+    public Window(int width, int height, String title)
     {
         window = glfwCreateWindow(width, height, title, 0, 0);
 
-        ByteBuffer videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         glfwSetWindowPos(this.window, (GLFWvidmode.width(videoMode) - width) / 2, (GLFWvidmode.height(videoMode) - height) / 2);
 
         glfwMakeContextCurrent(this.window);
@@ -51,14 +53,24 @@ public class Window extends EngineComponent
         glfwShowWindow(this.window);
     }
 
-    public Window(int width, int height, String title)
-    {
-        init(width, height, title);
-    }
-
     public Window()
     {
-        init(800, 600, "Window");
+        this(800, 600, "Black Goblin Engine");
+    }
+
+    public int getWidth()
+    {
+        return GLFWvidmode.width(videoMode);
+    }
+
+    public int getHeight()
+    {
+        return GLFWvidmode.height(videoMode);
+    }
+
+    public double getAspectRatio()
+    {
+        return GLFWvidmode.width(videoMode) / GLFWvidmode.height(videoMode);
     }
 
     @Override

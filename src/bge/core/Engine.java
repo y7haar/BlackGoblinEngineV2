@@ -23,7 +23,6 @@
 package bge.core;
 
 import bge.TestGame;
-import bge.rendering.RenderController;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GLContext;
 
@@ -65,10 +64,14 @@ public class Engine
         glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
+        // 8 x AA
+        glfwWindowHint(GLFW_SAMPLES, 8);
+
 
         //TODO: Replace Hack for Mac with own Factory or something alike
         if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0)
         {
+            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -79,7 +82,7 @@ public class Engine
         GLContext.createFromCurrent();
         Input.init(mainWindow);
 
-        this.renderController = new RenderController();
+        this.renderController = RenderController.getInstance();
         this.renderController.init();
 
 

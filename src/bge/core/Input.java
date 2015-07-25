@@ -29,13 +29,11 @@ import static org.lwjgl.glfw.GLFW.*;
  */
 public class Input
 {
-    private static InputController inputController;
     private static Window window;
 
     public static void init(Window window)
     {
         Input.window = window;
-        inputController = new InputController(window);
     }
 
     public static void close()

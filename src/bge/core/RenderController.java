@@ -20,9 +20,12 @@
  * THE SOFTWARE.
  */
 
-package bge.rendering;
+package bge.core;
 
-import bge.core.EngineComponent;
+import bge.components.EngineComponent;
+import bge.components.GameObject;
+
+import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
@@ -32,6 +35,18 @@ import static org.lwjgl.opengl.GL30.*;
  */
 public class RenderController extends EngineComponent
 {
+    private static RenderController instance = new RenderController();
+
+    private ArrayList<GameObject> gameObjects;
+
+    public static RenderController getInstance()
+    {
+        return instance;
+    }
+
+    private RenderController()
+    {
+    }
 
     @Override
     public void init()
@@ -44,17 +59,29 @@ public class RenderController extends EngineComponent
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_FRAMEBUFFER_SRGB);
+
+        gameObjects = new ArrayList<>();
     }
 
     @Override
     public void update()
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        for (GameObject o : gameObjects)
+        {
+            o.update();
+        }
     }
 
     @Override
     public void close()
     {
 
+    }
+
+    public void addGameObject(GameObject o)
+    {
+        gameObjects.add(o);
     }
 }

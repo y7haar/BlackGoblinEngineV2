@@ -20,12 +20,7 @@
  * THE SOFTWARE.
  */
 
-package bge.rendering;
-
-import bge.math.Matrix4x4;
-import bge.math.Vector3;
-
-import java.util.HashMap;
+package bge.core;
 
 import static org.lwjgl.opengl.GL20.*;
 
@@ -34,8 +29,6 @@ import static org.lwjgl.opengl.GL20.*;
  */
 public class Shader
 {
-    private int program;
-
     private static final int VERTEX_SHADER = 0;
     private static final int TESSELLATION_CONTROL_SHADER = 1;
     private static final int TESSELLATION_EVALUATION_SHADER = 2;
@@ -45,14 +38,14 @@ public class Shader
 
     private static final int SHADER_PART_LENGTH = 6;
 
+
+    private int program;
     private ShaderPart[] shaderParts;
-    private HashMap<String, Integer> uniforms;
 
     // TODO: Support other Shader types
 
     public Shader()
     {
-        this.uniforms = new HashMap<String, Integer>();
         this.program = glCreateProgram();
 
         if (program == 0)
@@ -63,17 +56,35 @@ public class Shader
         this.shaderParts = new ShaderPart[SHADER_PART_LENGTH];
     }
 
-    public void setVertexShader(VertexShader shader)
+    public void setVertexShader(ShaderPart shader)
     {
         this.shaderParts[VERTEX_SHADER] = shader;
     }
 
-    public void setFragmentShader(FragmentShader shader)
+    public void setTessellationControlShader(ShaderPart shader)
+    {
+        this.shaderParts[TESSELLATION_CONTROL_SHADER] = shader;
+    }
+
+    public void setTessellationEvaluationShader(ShaderPart shader)
+    {
+        this.shaderParts[TESSELLATION_EVALUATION_SHADER] = shader;
+    }
+
+    public void setGeometryShader(ShaderPart shader)
+    {
+        this.shaderParts[GEOMETRY_SHADER] = shader;
+    }
+
+    public void setFragmentShader(ShaderPart shader)
     {
         this.shaderParts[FRAGMENT_SHADER] = shader;
     }
 
-    // TODO: Add methods for setting other shader types
+    public void setComputeShader(ShaderPart shader)
+    {
+        this.shaderParts[COMPUTE_SHADER] = shader;
+    }
 
     private void compile()
     {
@@ -87,7 +98,7 @@ public class Shader
         }
     }
 
-    private void link()
+    private void link() throws Exception
     {
         glLinkProgram(program);
 
@@ -95,6 +106,8 @@ public class Shader
         {
             System.err.println("Linking failed for Shader with id " + program);
             System.err.println(glGetShaderInfoLog(program));
+
+            throw new Exception("Linking failed for Shader with id " + program);
         }
 
         glValidateProgram(program);
@@ -103,50 +116,37 @@ public class Shader
         {
             System.err.println("Shader invalid with id " + program);
             System.err.println(glGetShaderInfoLog(program));
+
+            throw new Exception("Validation failed for Shader with id " + program);
         }
     }
 
-    public void prepare()
+    private void cleanUp()
+    {
+        for (ShaderPart sp : shaderParts)
+        {
+            if (sp != null)
+            {
+                glDetachShader(program, sp.getShaderHandle());
+                glDeleteShader(sp.getShaderHandle());
+            }
+        }
+    }
+
+    public void prepare() throws Exception
     {
         compile();
         link();
-    }
-
-    public void addUniform(String name)
-    {
-        int location = glGetUniformLocation(program, name);
-
-        if (location < 0)
-        {
-            System.err.println("No uniform in Shader with name " + name);
-            //TODO: Exception
-        }
-
-        uniforms.put(name, location);
-    }
-
-    public void setUniform(String name, int value)
-    {
-        glUniform1i(uniforms.get(name), value);
-    }
-
-    public void setUniform(String name, float value)
-    {
-        glUniform1f(uniforms.get(name), value);
-    }
-
-    public void setUniform(String name, Vector3 value)
-    {
-        glUniform3f(uniforms.get(name), value.x, value.y, value.z);
-    }
-
-    public void setUniform(String name, Matrix4x4 value)
-    {
-        glUniformMatrix4fv(uniforms.get(name), true, value.toFloatBuffer());
+        cleanUp();
     }
 
     public void bind()
     {
         glUseProgram(program);
+    }
+
+    public int getProgramHandle()
+    {
+        return program;
     }
 }

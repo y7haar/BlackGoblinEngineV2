@@ -54,18 +54,12 @@ public class Color
 
     public Color(float red, float green, float blue)
     {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-        this.alpha = 1.0f;
+        this(red, green, blue, 1.0f);
     }
 
     public Color()
     {
-        this.red = 0.0f;
-        this.green = 0.0f;
-        this.blue = 0.0f;
-        this.alpha = 1.0f;
+        this(0.0f, 0.0f, 0.0f, 1.0f);
     }
 
     public void set(float r, float g, float b, float a)

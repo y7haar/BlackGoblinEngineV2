@@ -20,18 +20,37 @@
  * THE SOFTWARE.
  */
 
-package bge.rendering;
+package bge.components;
 
-import static org.lwjgl.opengl.GL20.*;
+import bge.core.Engine;
+import bge.math.Matrix4x4;
 
 /**
- * Created by Yannic Siebenhaar on 23.07.2015.
+ * Created by Yannic Siebenhaar on 24.07.2015.
  */
-public class FragmentShader extends ShaderPart
+public class Camera
 {
-    public FragmentShader(String source)
+    private Matrix4x4 projectionMatrix;
+    private Transform transform;
+
+    public Camera()
     {
-        super(source);
-        this.SHADER_TYPE = GL_FRAGMENT_SHADER;
+        this.projectionMatrix = new Matrix4x4().getPerspectiveProjection(60.0f, 4.0f / 3.0f, 1.0f, 100.0f);
+        this.transform = new Transform();
+    }
+
+    public Matrix4x4 getProjectionMatrix()
+    {
+        return projectionMatrix;
+    }
+
+    public void setProjectionMatrix(Matrix4x4 projectionMatrix)
+    {
+        this.projectionMatrix = projectionMatrix;
+    }
+
+    public Matrix4x4 getViewMatrix()
+    {
+        return transform.getTransformMatrix();
     }
 }

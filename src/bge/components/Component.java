@@ -28,15 +28,20 @@ package bge.components;
 public abstract class Component
 {
     private GameObject gameObject;
+    private String name;
+    private boolean enabled;
 
-    public Component(GameObject gameObject)
+    public Component(GameObject gameObject, String name)
     {
         this.gameObject = gameObject;
+        this.name = name;
+        this.enabled = true;
     }
 
     public Component()
     {
         this.gameObject = null;
+        this.name = "";
     }
 
     public void setGameObject(GameObject gameObject)
@@ -47,5 +52,22 @@ public abstract class Component
     public GameObject getGameObject()
     {
         return this.gameObject;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public abstract void update();
+
+    public void setEnabled(boolean enabled)
+    {
+        this.enabled = enabled;
+    }
+
+    public boolean isEnabled()
+    {
+        return enabled;
     }
 }

@@ -22,12 +22,11 @@
 
 package bge;
 
-import bge.components.Transform;
+import bge.components.Camera;
+import bge.components.GameObject;
+import bge.components.Mesh;
 import bge.core.*;
 import bge.math.*;
-import bge.rendering.Mesh;
-import bge.rendering.Shader;
-import bge.rendering.Vertex;
 
 /**
  * Created by Yannic Siebenhaar on 23.07.2015.
@@ -35,51 +34,58 @@ import bge.rendering.Vertex;
 public class TestGame
 {
     Mesh mesh;
-    ShaderLoader sl;
-    Shader shader;
-    Transform transform;
-    Transform t2;
-    float newX = 0.0f;
-    float newY = 0.0f;
+    ResourceLoader sl;
+    Material material;
+    GameObject g1, g2;
+    Camera c;
 
     public TestGame()
     {
+        g1 = new GameObject();
+        g2 = new GameObject();
+
+        c = new Camera();
+
         mesh = new Mesh();
-        sl = new ShaderLoader();
-        shader = sl.loadShaderDirectory("game/shader/basic");
+        sl = ResourceLoader.getInstance();
+        material = sl.loadMaterialPackage("game/shader/basic");
 
-        Vertex[] vertices = new Vertex[3];
+        Vertex[] vertices = new Vertex[]{
+                new Vertex(new Vector3(0, 1.7f, 0)),
+                new Vertex(new Vector3(1, 0, -1)),
+                new Vertex(new Vector3(1, 0, 1)),
+                new Vertex(new Vector3(-1, 0, 1)),
+                new Vertex(new Vector3(-1, 0, -1))
+        };
 
-        vertices[0] = new Vertex(new Vector3(-1, -1, 0));
-        vertices[1] = new Vertex(new Vector3(0, 1, 0));
-        vertices[2] = new Vertex(new Vector3(1, -1, 0));
+        int indices[] = new int[]{0, 2, 1,
+                0, 3, 2,
+                0, 4, 3,
+                0, 1, 4,
+                1, 2, 3,
+                1, 3, 4};
 
-        transform = new Transform();
-        t2 = new Transform();
 
-        mesh.addVertices(vertices);
+        mesh.addVertices(vertices, indices);
 
-        shader.prepare();
-        shader.addUniform("transform");
+        g1.getRenderer().setRenderContent(mesh);
+        g1.getRenderer().setMaterial(material);
 
+        g2.getRenderer().setRenderContent(mesh);
+        g2.getRenderer().setMaterial(material);
+
+        g1.getTransform().setPosition(new Vector3(-0.5f, 0, 0));
+        g2.getTransform().setPosition(new Vector3(0.5f, 0, 0));
+
+        RenderController.getInstance().addGameObject(g1);
+        RenderController.getInstance().addGameObject(g2);
     }
 
     public void update()
     {
-        newX += 0.5f * Time.getDelta();
-        newY += 0.5f * Time.getDelta();
-
-        System.out.println("DELTA  " + Time.getDelta());
-
-        //transform.scale(new Vector3(-0.01f, -0.01f, -0.01f));
-        transform.setPosition(new Vector3((float) Math.sin(newX), (float) Math.cos(newY), 0));
-        //transform.translate(new Vector3(-0.1f, 0.0f, 0));
-        //transform.setRotation(new Quaternion().fromEulerAngles(new Vector3(newY, newY, newX)));
-        transform.rotate(new Vector3(0, 0, 10f * Time.getDelta()));
-
-        shader.bind();
-        mesh.render();
-        shader.setUniform("transform", transform.getTransformMatrix());
+        g1.getTransform().rotate(new Vector3(0, 10 * Time.getDelta(), 0));
+        //g2.getTransform().rotate(new Vector3(0, 400 * Time.getDelta(), 0));
+        //g2.getTransform().translate(Vector3.FORWARD.mul(Time.getDelta()));
     }
 
 }

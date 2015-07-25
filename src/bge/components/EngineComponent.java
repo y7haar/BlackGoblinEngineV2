@@ -20,18 +20,16 @@
  * THE SOFTWARE.
  */
 
-package bge.rendering;
-
-import static org.lwjgl.opengl.GL20.*;
+package bge.components;
 
 /**
- * Created by Yannic Siebenhaar on 23.07.2015.
+ * Created by Yannic Siebenhaar on 22.07.2015.
  */
-public class VertexShader extends ShaderPart
+public abstract class EngineComponent
 {
-    public VertexShader(String source)
-    {
-        super(source);
-        this.SHADER_TYPE = GL_VERTEX_SHADER;
-    }
+    public abstract void init();
+
+    public abstract void update();
+
+    public abstract void close();
 }

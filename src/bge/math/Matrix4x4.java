@@ -27,43 +27,81 @@ import org.lwjgl.BufferUtils;
 import java.nio.FloatBuffer;
 
 /**
+ * Class for representing a 4x4 Matrix.
+ * Commonly used for doing calculations for the transform of an object.
+ *
  * Created by Yannic Siebenhaar on 20.07.2015.
  */
 public class Matrix4x4
 {
     private float[][] mat;
 
-    public Matrix4x4(float[][] elements)
+    /**
+     * Constructs a new Matrix with given elements.
+     *
+     * @param elements 2D Array of elements, must have the size 4 * 4.
+     */
+    public Matrix4x4(final float[][] elements)
     {
         this.mat = elements;
     }
 
+    /**
+     * Constructs a new Matrix with all elements set to 0.0f.
+     */
     public Matrix4x4()
     {
         this.mat = new float[4][4];
-        identity();
     }
 
-    public float get(int x, int y)
+    /**
+     * Retrieves an element of the Matrix stored at the given index x and y.
+     *
+     * @param x The x location of the value.
+     * @param y The y location of the value.
+     * @return Element that is stored at specified location.
+     */
+    public float get(final int x, final int y)
     {
         return mat[x][y];
     }
 
-    public void set(int x, int y, float value)
+    /**
+     * Sets an element of the Matrix stored at the given index x and y to a given value.
+     *
+     * @param x     The x location of the value.
+     * @param y     The y location of the value.
+     * @param value The value that is assigned to the location.
+     */
+    public void set(final int x, final int y, final float value)
     {
         mat[x][y] = value;
     }
 
+    /**
+     * Returns a 2D Array of all 4 * 4 Elements of the Matrix.
+     *
+     * @return 2D Array of elements.
+     */
     public float[][] getElements()
     {
         return mat;
     }
 
-    public void setElements(float[][] elements)
+    /**
+     * Sets all elements to new values.
+     *
+     * @param elements A 2D Array of size 4 * 4 that contains updated values.
+     */
+    public void setElements(final float[][] elements)
     {
         this.mat = elements;
     }
 
+    /**
+     * Sets the Matrix to an identity Matrix. This operation affects the Matrix and updates its elements.
+     * @return An instance of the identity Matrix.
+     */
     public Matrix4x4 identity()
     {
         mat[0][0] = 1.0f;
@@ -86,9 +124,15 @@ public class Matrix4x4
         return this;
     }
 
-    public Matrix4x4 add(Matrix4x4 rhs)
+    /**
+     * Performs an addition with another Matrix. This operation returns a new Matrix which contains the calculated data.
+     *
+     * @param rhs Right hand side argument for addition.
+     * @return A new Matrix which contains the result.
+     */
+    public Matrix4x4 add(final Matrix4x4 rhs)
     {
-        float[][] newMat = new float[4][4];
+        final float[][] newMat = new float[4][4];
 
         newMat[0][0] = mat[0][0] + rhs.mat[0][0];
         newMat[0][1] = mat[0][1] + rhs.mat[0][1];
@@ -113,9 +157,15 @@ public class Matrix4x4
         return new Matrix4x4(newMat);
     }
 
-    public Matrix4x4 mul(Matrix4x4 rhs)
+    /**
+     * Performs an multiplication with another Matrix. This operation returns a new Matrix which contains the calculated data.
+     *
+     * @param rhs Right hand side argument for multiplication.
+     * @return A new Matrix which contains the result.
+     */
+    public Matrix4x4 mul(final Matrix4x4 rhs)
     {
-        float[][] newMat = new float[4][4];
+        final float[][] newMat = new float[4][4];
 
         for(int i = 0;i < 4;++i)
         {
@@ -143,20 +193,29 @@ public class Matrix4x4
         return new Matrix4x4(newMat);
     }
 
-    public Matrix4x4 getTranslation(Vector3 translation)
+    /**
+     * Calculates a Matrix translation with a given Vector. This operation affects the Matrix and updates its data.
+     *
+     * @param translation A Vector that stores the translation.
+     * @return An instance of the Matrix that contains the result.
+     */
+    public Matrix4x4 getTranslation(final Vector3 translation)
     {
         mat[0][0] = 1.0f;
         mat[0][1] = 0.0f;
         mat[0][2] = 0.0f;
         mat[0][3] = translation.x;
+
         mat[1][0] = 0.0f;
         mat[1][1] = 1.0f;
         mat[1][2] = 0.0f;
         mat[1][3] = translation.y;
+
         mat[2][0] = 0.0f;
         mat[2][1] = 0.0f;
         mat[2][2] = 1.0f;
         mat[2][3] = translation.z;
+
         mat[3][0] = 0.0f;
         mat[3][1] = 0.0f;
         mat[3][2] = 0.0f;
@@ -165,63 +224,74 @@ public class Matrix4x4
         return this;
     }
 
-    public Matrix4x4 getRotation(Quaternion rotation)
+    /**
+     * Calculates a Matrix rotation with a given Quaternion. This operation affects the Matrix and updates its data.
+     *
+     * @param rotation A Quaternion that stores the rotation.
+     * @return An instance of the Matrix that contains the result.
+     */
+    public Matrix4x4 getRotation(final Quaternion rotation)
     {
-        float xx2 = 2 * (rotation.x * rotation.x);
-        float yy2 = 2 * (rotation.y * rotation.y);
-        float zz2 = 2 * (rotation.z * rotation.z);
+        final float xx2 = 2 * (rotation.x * rotation.x);
+        final float yy2 = 2 * (rotation.y * rotation.y);
+        final float zz2 = 2 * (rotation.z * rotation.z);
 
-        float xy2 = 2 * rotation.x * rotation.y;
-        float xz2 = 2 * rotation.x * rotation.z;
-        ;
+        final float xy2 = 2 * rotation.x * rotation.y;
+        final float xz2 = 2 * rotation.x * rotation.z;
 
-        float yz2 = 2 * rotation.y * rotation.z;
-        ;
+        final float yz2 = 2 * rotation.y * rotation.z;
 
-        float wx2 = 2 * rotation.w * rotation.x;
-        ;
-        float wy2 = 2 * rotation.w * rotation.y;
-        ;
-        float wz2 = 2 * rotation.w * rotation.z;
-        ;
+        final float wx2 = 2 * rotation.w * rotation.x;
+        final float wy2 = 2 * rotation.w * rotation.y;
+        final float wz2 = 2 * rotation.w * rotation.z;
 
 
         mat[0][0] = 1 - yy2 - zz2;
         mat[0][1] = xy2 + wz2;
         mat[0][2] = xz2 - wy2;
         mat[0][3] = mat[0][3];
+
         mat[1][0] = xy2 - wz2;
         mat[1][1] = 1 - xx2 - zz2;
         mat[1][2] = yz2 + wx2;
         mat[1][3] = mat[1][3];
+
         mat[2][0] = xz2 + wy2;
         mat[2][1] = yz2 - wx2;
         mat[2][2] = 1 - xx2 - yy2;
         mat[2][3] = mat[2][3];
+
         mat[3][0] = 0;
         mat[3][1] = 0;
         mat[3][2] = 0;
         mat[3][3] = 1;
 
-        //TODO: Remove last column if possible
-
         return this;
     }
 
-    public Matrix4x4 getScaling(Vector3 scaling)
+    /**
+     * Calculates a Matrix scaling with a given Vector. This operation affects the Matrix and updates its data.
+     *
+     * @param scaling A Vector that stores the scaling.
+     * @return An instance of a Matrix that contains the result.
+     */
+    public Matrix4x4 getScaling(final Vector3 scaling)
     {
         mat[0][0] = scaling.x;
         mat[0][1] = 0.0f;
         mat[0][2] = 0.0f;
         mat[0][3] = 0.0f;
+
         mat[1][0] = 0.0f;
         mat[1][1] = scaling.y;
         mat[1][2] = 0.0f;
         mat[1][3] = 0.0f;
+
         mat[2][0] = 0.0f;
         mat[2][1] = 0.0f;
         mat[2][2] = scaling.z;
         mat[2][3] = 0.0f;
+
         mat[3][0] = 0.0f;
         mat[3][1] = 0.0f;
         mat[3][2] = 0.0f;
@@ -230,6 +300,49 @@ public class Matrix4x4
         return this;
     }
 
+    /**
+     * Calculates a Matrix to a given perspective (3D) projection.
+     * The opposite of a perspective projection would be an orthographic projection.
+     * This operation affects the Matrix and updates its data.
+     *
+     * @param fov         The Field of View of the projection in degrees.
+     * @param aspectRatio The aspect ratio of the projection (e.g. 4 / 3 or 16 / 9).
+     * @param zNear       Sets distance when objects are clipped near of the projection.
+     * @param zFar        Sets distance when objects are clipped far of the projection.
+     * @return An instance of a Matrix that contains a perspective projection.
+     */
+    public Matrix4x4 getPerspectiveProjection(final float fov, final float aspectRatio, final float zNear, final float zFar)
+    {
+        final float zRange = zNear - zFar;
+        final float tanOfFov2 = (float) Math.tan(Math.toRadians(fov / 2));
+
+        mat[0][0] = 1.0f / (tanOfFov2 * aspectRatio);
+        mat[0][1] = 0.0f;
+        mat[0][2] = 0.0f;
+        mat[0][3] = 0.0f;
+
+        mat[1][0] = 0.0f;
+        mat[1][1] = 1.0f / tanOfFov2;
+        mat[1][2] = 0.0f;
+        mat[1][3] = 0.0f;
+
+        mat[2][0] = 0.0f;
+        mat[2][1] = 0.0f;
+        mat[2][2] = (-zNear - zFar) / zRange;
+        mat[2][3] = 2.0f * zFar * zNear / zRange;
+
+        mat[3][0] = 0.0f;
+        mat[3][1] = 0.0f;
+        mat[3][2] = 1.0f;
+        mat[3][3] = 0.0f;
+
+        return this;
+    }
+
+    /**
+     * Converts Matrix4x4 into a FloatBuffer. Useful for giving data to the GPU.
+     * @return A flipped FloatBuffer that contains the data of this Matrix.
+     */
     public FloatBuffer toFloatBuffer()
     {
         FloatBuffer buffer = BufferUtils.createFloatBuffer(4 * 4);
@@ -246,12 +359,16 @@ public class Matrix4x4
         return buffer;
     }
 
+    /**
+     * Converts Matrix4x4 into a String. Useful for debugging.
+     * @return The converted String.
+     */
     public String toString()
     {
-        String x = "Matrix4x4:\t(" + mat[0][0] + ", " + mat[0][1] + ", " + mat[0][2] + ", " + mat[0][3] + ")\n";
-        String y = "\t\t\t(" + mat[1][0] + ", " + mat[1][1] + ", " + mat[1][2] + ", " + mat[1][3] + ")\n";
-        String z = "\t\t\t(" + mat[2][0] + ", " + mat[2][1] + ", " + mat[2][2] + ", " + mat[2][3] + ")\n";
-        String w = "\t\t\t(" + mat[3][0] + ", " + mat[3][1] + ", " + mat[3][2] + ", " + mat[3][3] + ")";
+        final String x = "Matrix4x4:\t(" + mat[0][0] + ", " + mat[0][1] + ", " + mat[0][2] + ", " + mat[0][3] + ")\n";
+        final String y = "\t\t\t(" + mat[1][0] + ", " + mat[1][1] + ", " + mat[1][2] + ", " + mat[1][3] + ")\n";
+        final String z = "\t\t\t(" + mat[2][0] + ", " + mat[2][1] + ", " + mat[2][2] + ", " + mat[2][3] + ")\n";
+        final String w = "\t\t\t(" + mat[3][0] + ", " + mat[3][1] + ", " + mat[3][2] + ", " + mat[3][3] + ")";
 
         return x + y + z + w;
     }

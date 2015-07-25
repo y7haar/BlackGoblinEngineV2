@@ -20,11 +20,31 @@
  * THE SOFTWARE.
  */
 
-package bge.core;
+package bge.components;
 
 /**
- * Created by Yannic Siebenhaar on 19.07.2015.
+ * Created by Yannic Siebenhaar on 25.07.2015.
  */
-public class InputManager
+public class MeshRenderer extends Renderer
 {
+    public MeshRenderer(GameObject gameObject)
+    {
+        super(gameObject);
+    }
+
+    @Override
+    public void render()
+    {
+        this.getMaterial().use();
+
+        this.getMaterial().setMatrix4x4("transform", this.getGameObject().getTransform().getTransformMatrix());
+
+        getRenderContent().render();
+    }
+
+    @Override
+    public void update()
+    {
+        render();
+    }
 }

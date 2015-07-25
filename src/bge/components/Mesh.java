@@ -20,9 +20,12 @@
  * THE SOFTWARE.
  */
 
-package bge.rendering;
+package bge.components;
+
+import bge.core.Vertex;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 import static org.lwjgl.BufferUtils.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -32,23 +35,31 @@ import static org.lwjgl.opengl.GL20.*;
 /**
  * Created by Yannic Siebenhaar on 23.07.2015.
  */
-public class Mesh
+public class Mesh extends RenderContent
 {
     private int vertexBufferObject;
+    private int indexBufferObject;
+
     private FloatBuffer vertexBuffer;
+    private IntBuffer indexBuffer;
+
     private int size;
 
     public Mesh()
     {
         this.vertexBufferObject = glGenBuffers();
+        this.indexBufferObject = glGenBuffers();
         this.vertexBuffer = null;
+        this.indexBuffer = null;
         this.size = 0;
     }
 
-    public void addVertices(Vertex[] vertices)
+    public void addVertices(Vertex[] vertices, int[] indices)
     {
+        size = indices.length;
+
         this.vertexBuffer = createFloatBuffer(vertices.length * Vertex.SIZE);
-        size = vertices.length;
+        this.indexBuffer = createIntBuffer(indices.length);
 
         for (Vertex v : vertices)
         {
@@ -58,10 +69,18 @@ public class Mesh
         }
         this.vertexBuffer.flip();
 
+
+        indexBuffer.put(indices);
+        indexBuffer.flip();
+
         glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
         glBufferData(GL_ARRAY_BUFFER, this.vertexBuffer, GL_STATIC_DRAW);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBuffer, GL_STATIC_DRAW);
     }
 
+    @Override
     public void render()
     {
         glEnableVertexAttribArray(0);
@@ -69,7 +88,8 @@ public class Mesh
         glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE * Float.BYTES, 0);
 
-        glDrawArrays(GL_TRIANGLES, 0, size);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
+        glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
 
         glDisableVertexAttribArray(0);
     }

@@ -23,10 +23,6 @@
 package bge;
 
 import bge.core.Engine;
-import bge.core.Color;
-import bge.core.ShaderLoader;
-import bge.math.Matrix4x4;
-import bge.math.*;
 
 /**
  * Created by Yannic Siebenhaar on 18.07.2015.

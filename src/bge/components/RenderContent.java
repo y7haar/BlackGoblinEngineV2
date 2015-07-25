@@ -20,19 +20,12 @@
  * THE SOFTWARE.
  */
 
-package bge.core;
-
-import static org.lwjgl.glfw.GLFW.*;
+package bge.components;
 
 /**
- * Created by Yannic Siebenhaar on 18.07.2015.
+ * Created by Yannic Siebenhaar on 25.07.2015.
  */
-public class InputController
+public abstract class RenderContent
 {
-    private Window mainWindow;
-
-    public InputController(Window window)
-    {
-        this.mainWindow = window;
-    }
+    public abstract void render();
 }

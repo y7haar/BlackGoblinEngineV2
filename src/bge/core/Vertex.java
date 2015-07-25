@@ -20,47 +20,35 @@
  * THE SOFTWARE.
  */
 
-package bge.rendering;
+package bge.core;
 
-import static org.lwjgl.opengl.GL20.*;
+import bge.math.*;
 
 /**
  * Created by Yannic Siebenhaar on 23.07.2015.
  */
-public abstract class ShaderPart
+public class Vertex
 {
-    protected int SHADER_TYPE = -1;
+    public static final short SIZE = 3;
+    private Vector3 position;
 
-    private int handle;
-    private String source;
-
-    public ShaderPart(String source)
+    public Vertex(Vector3 pos)
     {
-        this.source = source;
+        this.position = pos;
     }
 
-    public void compile()
+    public Vertex()
     {
-        handle = glCreateShader(SHADER_TYPE);
-
-        if (handle == 0)
-        {
-            throw new IllegalStateException("ShaderPart could not be created");
-        }
-
-        glShaderSource(handle, source);
-        glCompileShader(handle);
-
-        if (glGetShaderi(handle, GL_COMPILE_STATUS) == 0)
-        {
-            System.err.println("Shader could not be compiled with id " + handle);
-            System.err.println(glGetShaderInfoLog(handle));
-            //TODO: Exception, Shader did not compile
-        }
+        this(new Vector3());
     }
 
-    public int getShaderHandle()
+    public Vector3 getPosition()
     {
-        return this.handle;
+        return position;
+    }
+
+    public void setPosition(Vector3 position)
+    {
+        this.position = position;
     }
 }

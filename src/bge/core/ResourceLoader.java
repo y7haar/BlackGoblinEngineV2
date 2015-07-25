@@ -22,24 +22,59 @@
 
 package bge.core;
 
-import bge.rendering.FragmentShader;
-import bge.rendering.Shader;
-import bge.rendering.VertexShader;
+import bge.components.Mesh;
 
 import java.io.*;
 
 /**
  * Created by Yannic Siebenhaar on 23.07.2015.
  */
-public class ShaderLoader
+public class ResourceLoader
 {
+    // Singleon
+    private static ResourceLoader instance;
+
     private static final String VERTEX_EXTENSION = ".vs";
     private static final String FRAGMENT_EXTENSION = ".fs";
 
-    private static final String DEFAULT_SHADER_DIRECTORY = "game/shader/default";
-    private static Shader DEFAULT_SHADER = null;
+    private ResourceLoader()
+    {
+    }
 
-    public Shader loadShaderDirectory(String directory)
+    public static ResourceLoader getInstance()
+    {
+        if (instance == null)
+            instance = new ResourceLoader();
+
+        return instance;
+    }
+
+    public Material loadMaterialPackage(String directory)
+    {
+        Shader shader = loadShaderPackage(directory);
+
+        try
+        {
+            shader.prepare();
+        }
+
+        catch (Exception e)
+        {
+            return MaterialManager.getInstance().getDefaultMaterial();
+        }
+
+        String splits[] = directory.split("/");
+        String name = splits[splits.length - 1];
+
+        Material material = new Material(name);
+
+        material.setShader(shader);
+        MaterialManager.getInstance().addMaterial(material);
+
+        return material;
+    }
+
+    private Shader loadShaderPackage(String directory)
     {
         Shader shader = new Shader();
 
@@ -56,11 +91,11 @@ public class ShaderLoader
         {
             if (f.getName().endsWith(name + VERTEX_EXTENSION))
             {
-                VertexShader vertexShader = loadVertexShader(f.getPath());
+                ShaderPart vertexShader = loadShaderPart(f.getPath(), ShaderPart.VERTEX_TYPE);
                 shader.setVertexShader(vertexShader);
             } else if (f.getName().endsWith(name + FRAGMENT_EXTENSION))
             {
-                FragmentShader fragmentShader = loadFragmentShader(f.getPath());
+                ShaderPart fragmentShader = loadShaderPart(f.getPath(), ShaderPart.FRAGMENT_TYPE);
                 shader.setFragmentShader(fragmentShader);
             }
         }
@@ -68,24 +103,15 @@ public class ShaderLoader
         return shader;
     }
 
-    public Shader getDefaultShader()
+    private ShaderPart loadShaderPart(String directory, int type)
     {
-        if (ShaderLoader.DEFAULT_SHADER == null)
-        {
-            ShaderLoader.DEFAULT_SHADER = loadShaderDirectory(DEFAULT_SHADER_DIRECTORY);
-        }
-
-        return ShaderLoader.DEFAULT_SHADER;
+        return new ShaderPart(readText(directory), type);
     }
 
-    public VertexShader loadVertexShader(String directory)
+    public Mesh loadMesh()
     {
-        return new VertexShader(readText(directory));
-    }
-
-    public FragmentShader loadFragmentShader(String directory)
-    {
-        return new FragmentShader(readText(directory));
+        //TODO: Implement parser for Obj Files
+        return null;
     }
 
     // TODO: Other Types
@@ -106,10 +132,16 @@ public class ShaderLoader
                 text += "\n" + line;
                 line = reader.readLine();
             }
-        } catch (FileNotFoundException e)
+
+            reader.close();
+        }
+
+        catch (FileNotFoundException e)
         {
             e.printStackTrace();
-        } catch (IOException e)
+        }
+
+        catch (IOException e)
         {
             e.printStackTrace();
         }

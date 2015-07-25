@@ -20,35 +20,42 @@
  * THE SOFTWARE.
  */
 
-package bge.rendering;
+package bge.components;
 
-import bge.math.*;
+import bge.core.Material;
 
 /**
- * Created by Yannic Siebenhaar on 23.07.2015.
+ * Created by Yannic Siebenhaar on 25.07.2015.
  */
-public class Vertex
+public abstract class Renderer extends Component
 {
-    public static final short SIZE = 3;
-    private Vector3 position;
+    private Material material;
+    private RenderContent renderContent;
 
-    public Vertex(Vector3 pos)
+    public Renderer(GameObject gameObject)
     {
-        this.position = pos;
+        super(gameObject, "renderer");
     }
 
-    public Vertex()
+    public Material getMaterial()
     {
-
+        return material;
     }
 
-    public Vector3 getPosition()
+    public void setMaterial(Material material)
     {
-        return position;
+        this.material = material;
     }
 
-    public void setPosition(Vector3 position)
+    public RenderContent getRenderContent()
     {
-        this.position = position;
+        return renderContent;
     }
+
+    public void setRenderContent(RenderContent renderContent)
+    {
+        this.renderContent = renderContent;
+    }
+
+    public abstract void render();
 }

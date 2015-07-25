@@ -23,65 +23,147 @@
 package bge.math;
 
 /**
+ * Class for representing a Vector with 2 components.
+ * Commonly used for 2D transformations that affect the screen.
+ *
  * Created by Yannic Siebenhaar on 20.07.2015.
  */
 public class Vector2
 {
+    public static final Vector2 UP = new Vector2(0.0f, 1.0f);
+    public static final Vector2 DOWN = new Vector2(0.0f, -1.0f);
+
+    public static final Vector2 LEFT = new Vector2(-1.0f, 0.0f);
+    public static final Vector2 RIGHT = new Vector2(1.0f, 0.0f);
+
+    /**
+     * The x component.
+     */
     public float x;
+
+    /**
+     * The y component
+     */
     public float y;
 
-    public Vector2(float x, float y)
+    /**
+     * Constructs a new Vector with given values.
+     *
+     * @param x The x component of a Vector.
+     * @param y The y component of a Vector.
+     */
+    public Vector2(final float x, final float y)
     {
         this.x = x;
         this.y = y;
     }
 
+    /**
+     * Constructs a new Vector. All components are set to 0.0f.
+     */
     public Vector2()
     {
         this.x = 0.0f;
         this.y = 0.0f;
     }
 
-    public void set(float x, float y)
+    /**
+     * Setter method to set all values of the Vector. If you want to set a single value, use the public property.
+     *
+     * @param x The x component of a Vector.
+     * @param y The y component of a Vector.
+     */
+    public void set(final float x, final float y)
     {
         this.x = x;
         this.y = y;
     }
 
-    public Vector2 add(Vector2 rhs)
+    /**
+     * Performs an addition with another Vector. This operation returns a new Vector which contains the calculated data.
+     *
+     * @param rhs A Vector as right hand side argument.
+     * @return A new Vector that holds the result.
+     */
+    public Vector2 add(final Vector2 rhs)
     {
         return new Vector2(x + rhs.x, y + rhs.y);
     }
 
-    public Vector2 sub(Vector2 rhs)
+    /**
+     * Performs a subtraction with another Vector. This operation returns a new Vector which contains the calculated data.
+     *
+     * @param rhs A Vector as right hand side argument.
+     * @return A new Vector that holds the result.
+     */
+    public Vector2 sub(final Vector2 rhs)
     {
         return new Vector2(x - rhs.x, y - rhs.y);
     }
 
-    public Vector2 mul(Vector2 rhs)
+    /**
+     * Performs a multiplication with another Vector. This operation returns a new Vector which contains the calculated data.
+     *
+     * @param rhs A Vector as right hand side argument.
+     * @return A new Vector that holds the result.
+     */
+    public Vector2 mul(final Vector2 rhs)
     {
         return new Vector2(x * rhs.x, y * rhs.y);
     }
 
-    public Vector2 div(Vector2 rhs)
+    /**
+     * Performs a multiplication with a float value. All components are multiplicated with given value.
+     * This operation returns a new Vector which contains the calculated data.
+     *
+     * @param rhs The number.
+     * @return A new Vector that holds the result.
+     */
+    public Vector2 mul(final float rhs)
+    {
+        return new Vector2(x * rhs, y * rhs);
+    }
+
+    /**
+     * Performs a division with another Vector. This operation returns a new Vector which contains the calculated data.
+     *
+     * @param rhs A Vector as right hand side argument.
+     * @return A new Vector that holds the result.
+     */
+    public Vector2 div(final Vector2 rhs)
     {
         return new Vector2(x / rhs.x, y / rhs.y);
     }
 
-
+    /**
+     * Calculates the length of the Vector and returns the result as floating point number.
+     *
+     * @return The length of the Vector.
+     */
     public float length()
     {
         return (float) Math.sqrt(x * x + y * y);
     }
 
-    public float dot(Vector2 rhs)
+    /**
+     * Calculates the dot product of two Vectors and returns the result as floating point number.
+     *
+     * @param rhs Right hand side value to calculate dot product.
+     * @return The dot product of the Vector.
+     */
+    public float dot(final Vector2 rhs)
     {
         return x * rhs.x + y * rhs.y;
     }
 
+    /**
+     * Normalizes the Vector. Normalizing means dividing all components (x, y) by the length of a Vector.
+     * This Operation affects the Vector and changes data.
+     * @return The updated instance.
+     */
     public Vector2 normalize()
     {
-        float length = (float) Math.sqrt(x * x + y * y);
+        final float length = (float) Math.sqrt(x * x + y * y);
 
         x /= length;
         y /= length;
@@ -89,9 +171,15 @@ public class Vector2
         return this;
     }
 
+    /**
+     * Returns a new instance of the normalized Vector.
+     * Normalizing means dividing all components (x, y) by the length of a Vector.
+     * This Operation does not affects the Vector.
+     * @return A new instance of the normalized Vector.
+     */
     public Vector2 getNormalized()
     {
-        float length = (float) Math.sqrt(x * x + y * y);
+        final float length = (float) Math.sqrt(x * x + y * y);
 
         float newX = x / length;
         float newY = y / length;
@@ -99,28 +187,47 @@ public class Vector2
         return new Vector2(newX, newY);
     }
 
-    public float distance(Vector2 rhs)
+    /**
+     * Calculates the distance of two Vectors.
+     *
+     * @param rhs Right hand side value to calculate the distance.
+     * @return The distance as floating point number.
+     */
+    public float distance(final Vector2 rhs)
     {
-        float newX = rhs.x - x;
-        float newY = rhs.y - y;
+        final float newX = rhs.x - x;
+        final float newY = rhs.y - y;
 
         return (float) Math.sqrt(newX * newX + newY * newY);
     }
 
-
-
-    public static Vector2 parseVector(Vector4 rhs)
+    /**
+     * Converts a Vector4 into a Vector2. The z and w components are ignored.
+     *
+     * @param rhs Vector which will be converted.
+     * @return A new Vector that contains data of the given Vector.
+     */
+    public static Vector2 parseVector(final Vector4 rhs)
     {
         return new Vector2(rhs.x, rhs.y);
     }
 
-    public static Vector2 parseVector(Vector3 rhs)
+    /**
+     * Converts a Vector3 into a Vector2. The z component is ignored.
+     *
+     * @param rhs Vector which will be converted.
+     * @return A new Vector that contains data of the given Vector.
+     */
+    public static Vector2 parseVector(final Vector3 rhs)
     {
         return new Vector2(rhs.x, rhs.y);
     }
 
 
-
+    /**
+     * Converts Vector2 into a String. Useful for debugging.
+     * @return The converted String.
+     */
     public String toString()
     {
         return "Vector2: (" + this.x + "), (" + this.y + ")";

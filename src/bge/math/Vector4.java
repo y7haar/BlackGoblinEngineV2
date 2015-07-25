@@ -23,16 +23,42 @@
 package bge.math;
 
 /**
+ * Class for representing a Vector with 4 components.
+ * Commonly used for calculations with matrices.
+ *
  * Created by Yannic Siebenhaar on 20.07.2015.
  */
 public class Vector4
 {
+    /**
+     * The x component.
+     */
     public float x;
+
+    /**
+     * The y component.
+     */
     public float y;
+
+    /**
+     * The z component.
+     */
     public float z;
+
+    /**
+     * The w component.
+     */
     public float w;
 
-    public Vector4(float x, float y, float z, float w)
+    /**
+     * Constructs a new Vector with given values.
+     *
+     * @param x The x component of a Vector.
+     * @param y The y component of a Vector.
+     * @param z The z component of a Vector.
+     * @param w The w component of a Vector.
+     */
+    public Vector4(final float x, final float y, final float z, final float w)
     {
         this.x = x;
         this.y = y;
@@ -40,6 +66,9 @@ public class Vector4
         this.w = w;
     }
 
+    /**
+     * Constructs a new Vector. All components are set to 0.0f.
+     */
     public Vector4()
     {
         this.x = 0.0f;
@@ -48,7 +77,15 @@ public class Vector4
         this.w = 0.0f;
     }
 
-    public void set(float x, float y, float z, float w)
+    /**
+     * Setter method to set all values of the Vector. If you want to set a single value, use the public property.
+     *
+     * @param x The x component of a Vector.
+     * @param y The y component of a Vector.
+     * @param z The z component of a Vector.
+     * @param w The w component of a Vector.
+     */
+    public void set(final float x, final float y, final float z, final float w)
     {
         this.x = x;
         this.y = y;
@@ -56,40 +93,91 @@ public class Vector4
         this.w = w;
     }
 
-    public Vector4 add(Vector4 rhs)
+    /**
+     * Performs an addition with another Vector. This operation returns a new Vector which contains the calculated data.
+     *
+     * @param rhs A Vector as right hand side argument.
+     * @return A new Vector that holds the result.
+     */
+    public Vector4 add(final Vector4 rhs)
     {
         return new Vector4(x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w);
     }
 
-    public Vector4 sub(Vector4 rhs)
+    /**
+     * Performs a subtraction with another Vector. This operation returns a new Vector which contains the calculated data.
+     *
+     * @param rhs A Vector as right hand side argument.
+     * @return A new Vector that holds the result.
+     */
+    public Vector4 sub(final Vector4 rhs)
     {
         return new Vector4(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
     }
 
-    public Vector4 mul(Vector4 rhs)
+    /**
+     * Performs a multiplication with another Vector. This operation returns a new Vector which contains the calculated data.
+     *
+     * @param rhs A Vector as right hand side argument.
+     * @return A new Vector that holds the result.
+     */
+    public Vector4 mul(final Vector4 rhs)
     {
         return new Vector4(x * rhs.x, y * rhs.y, z * rhs.z, w * rhs.w);
     }
 
-    public Vector4 div(Vector4 rhs)
+    /**
+     * Performs a multiplication with a float value. All components are multiplicated with given value.
+     * This operation returns a new Vector which contains the calculated data.
+     *
+     * @param rhs The number.
+     * @return A new Vector that holds the result.
+     */
+    public Vector4 mul(final float rhs)
+    {
+        return new Vector4(x * rhs, y * rhs, z * rhs, w * rhs);
+    }
+
+    /**
+     * Performs a division with another Vector. This operation returns a new Vector which contains the calculated data.
+     *
+     * @param rhs A Vector as right hand side argument.
+     * @return A new Vector that holds the result.
+     */
+    public Vector4 div(final Vector4 rhs)
     {
         return new Vector4(x / rhs.x, y / rhs.y, z / rhs.z, w / rhs.w);
     }
 
-
+    /**
+     * Calculates the length of the Vector and returns the result as floating point number.
+     *
+     * @return The length of the Vector.
+     */
     public float length()
     {
         return (float) Math.sqrt(x * x + y * y + z * z + w * w);
     }
 
-    public float dot(Vector4 rhs)
+    /**
+     * Calculates the dot product of two Vectors and returns the result as floating point number.
+     *
+     * @param rhs Right hand side value to calculate dot product.
+     * @return The dot product of the Vector.
+     */
+    public float dot(final Vector4 rhs)
     {
         return x * rhs.x + y * rhs.y + z * rhs.z + w * rhs.w;
     }
 
+    /**
+     * Normalizes the Vector. Normalizing means dividing all components (x, y, z, w) by the length of a Vector.
+     * This Operation affects the Vector and changes data.
+     * @return The updated instance.
+     */
     public Vector4 normalize()
     {
-        float length = (float) Math.sqrt(x * x + y * y + z * z + w * w);
+        final float length = (float) Math.sqrt(x * x + y * y + z * z + w * w);
 
         x /= length;
         y /= length;
@@ -99,41 +187,67 @@ public class Vector4
         return this;
     }
 
+    /**
+     * Returns a new instance of the normalized Vector.
+     * Normalizing means dividing all components (x, y, z, w) by the length of a Vector.
+     * This Operation does not affects the Vector.
+     * @return A new instance of the normalized Vector.
+     */
     public Vector4 getNormalized()
     {
-        float length = (float) Math.sqrt(x * x + y * y + z * z + w * w);
+        final float length = (float) Math.sqrt(x * x + y * y + z * z + w * w);
 
-        float newX = x / length;
-        float newY = y / length;
-        float newZ = z / length;
-        float newW = w / length;
+        final float newX = x / length;
+        final float newY = y / length;
+        final float newZ = z / length;
+        final float newW = w / length;
 
         return new Vector4(newX, newY, newZ, newW);
     }
 
-    public float distance(Vector4 rhs)
+    /**
+     * Calculates the distance of two Vectors.
+     *
+     * @param rhs Right hand side value to calculate the distance.
+     * @return The distance as floating point number.
+     */
+    public float distance(final Vector4 rhs)
     {
-        float newX = rhs.x - x;
-        float newY = rhs.y - y;
-        float newZ = rhs.z - z;
-        float newW = rhs.w - w;
+        final float newX = rhs.x - x;
+        final float newY = rhs.y - y;
+        final float newZ = rhs.z - z;
+        final float newW = rhs.w - w;
 
         return (float) Math.sqrt(newX * newX + newY * newY + newZ * newZ + newW * newW);
     }
 
 
-
-
-    public static Vector4 parseVector(Vector3 rhs)
+    /**
+     * Converts a Vector3 into a Vector4. The w component is set to 0.0f.
+     *
+     * @param rhs Vector which will be converted.
+     * @return A new Vector that contains data of the given Vector.
+     */
+    public static Vector4 parseVector(final Vector3 rhs)
     {
         return new Vector4(rhs.x, rhs.y, rhs.z, 0.0f);
     }
 
-    public static Vector4 parseVector(Vector2 rhs)
+    /**
+     * Converts a Vector2 into a Vector4. The z and w components are set to 0.0f.
+     *
+     * @param rhs Vector which will be converted.
+     * @return A new Vector that contains data of the given Vector.
+     */
+    public static Vector4 parseVector(final Vector2 rhs)
     {
         return new Vector4(rhs.x, rhs.y, 0.0f, 0.0f);
     }
 
+    /**
+     * Converts Vector4 into a String. Useful for debugging.
+     * @return The converted String.
+     */
     public String toString()
     {
         return "Vector4: (" + this.x + "), (" + this.y + "), (" + this.z + "), (" + this.w + ")";
