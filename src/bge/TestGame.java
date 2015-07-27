@@ -25,8 +25,11 @@ package bge;
 import bge.components.Camera;
 import bge.components.GameObject;
 import bge.components.Mesh;
+import bge.components.RenderContent;
 import bge.core.*;
 import bge.math.*;
+
+import static org.lwjgl.glfw.GLFW.glfwGetKey;
 
 /**
  * Created by Yannic Siebenhaar on 23.07.2015.
@@ -37,14 +40,19 @@ public class TestGame
     ResourceLoader sl;
     Material material;
     GameObject g1, g2;
-    Camera c;
+    Camera camera;
 
     public TestGame()
     {
+        camera = new Camera();
+        camera.setBackgroundColor(Color.WHITE);
+        RenderController.getInstance().addCamera(camera);
+
         g1 = new GameObject();
         g2 = new GameObject();
 
-        c = new Camera();
+
+        //mesh = ResourceLoader.getInstance().loadMesh("game/models/m.obj");
 
         mesh = new Mesh();
         sl = ResourceLoader.getInstance();
@@ -74,18 +82,67 @@ public class TestGame
         g2.getRenderer().setRenderContent(mesh);
         g2.getRenderer().setMaterial(material);
 
-        g1.getTransform().setPosition(new Vector3(-0.5f, 0, 0));
-        g2.getTransform().setPosition(new Vector3(0.5f, 0, 0));
+        g1.getTransform().setPosition(new Vector3(0, 0, 5f));
+        //g2.getTransform().setPosition(new Vector3(0.5f, 0, 0));
 
-        RenderController.getInstance().addGameObject(g1);
-        RenderController.getInstance().addGameObject(g2);
+        //RenderController.getInstance().addGameObject(g1);
+        //RenderController.getInstance().addGameObject(g2);
+
+        for (int i = 0; i < 20; ++i)
+        {
+            for (int j = 0; j < 20; ++j)
+            {
+                GameObject go = new GameObject();
+                go.getRenderer().setRenderContent(mesh);
+                go.getRenderer().setMaterial(material);
+
+                go.getTransform().setPosition(new Vector3(5 * i, 0, 5 * j));
+
+                RenderController.getInstance().addGameObject(go);
+            }
+        }
+
     }
 
     public void update()
     {
-        g1.getTransform().rotate(new Vector3(0, 10 * Time.getDelta(), 0));
+        if (Input.getKeyUp("c"))
+            camera.setBackgroundColor(new Color((float) Math.random(), (float) Math.random(), (float) Math.random()));
+
+        if (Input.getKey("w"))
+            camera.getTransform().translate(Vector3.FORWARD.mul(10).mul(Time.getDelta()));
+
+        if (Input.getKey("a"))
+            camera.getTransform().translate(Vector3.LEFT.mul(10).mul(Time.getDelta()));
+
+        if (Input.getKey("s"))
+            camera.getTransform().translate(Vector3.BACK.mul(10).mul(Time.getDelta()));
+
+        if (Input.getKey("d"))
+            camera.getTransform().translate(Vector3.RIGHT.mul(10).mul(Time.getDelta()));
+
+        if (Input.getKey("left shift"))
+            camera.getTransform().translate(Vector3.DOWN.mul(10).mul(Time.getDelta()));
+
+        if (Input.getKey("space"))
+            camera.getTransform().translate(Vector3.UP.mul(10).mul(Time.getDelta()));
+
+
+        if (Input.getKey("left"))
+            camera.getTransform().rotate(Vector3.UP.mul(100).mul(Time.getDelta()));
+
+        if (Input.getKey("right"))
+            camera.getTransform().rotate(Vector3.DOWN.mul(100).mul(Time.getDelta()));
+
+        if (Input.getKey("up"))
+            camera.getTransform().rotate(Vector3.LEFT.mul(100).mul(Time.getDelta()));
+
+        if (Input.getKey("down"))
+            camera.getTransform().rotate(Vector3.RIGHT.mul(100).mul(Time.getDelta()));
+
+        //g1.getTransform().rotate(Vector3.LEFT.mul(Time.getDelta() * 100.0f));
         //g2.getTransform().rotate(new Vector3(0, 400 * Time.getDelta(), 0));
-        //g2.getTransform().translate(Vector3.FORWARD.mul(Time.getDelta()));
+        //g2.getTransform().translate(Vector3.LEFT.mul(Time.getDelta()));
     }
 
 }

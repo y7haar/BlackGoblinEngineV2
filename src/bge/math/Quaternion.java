@@ -152,6 +152,31 @@ public class Quaternion
     }
 
     /**
+     * Conjugates the Quaternion.
+     * This Operation affects the Quaternion and changes data.
+     *
+     * @return The updated instance.
+     */
+    public Quaternion conjugate()
+    {
+        x = -x;
+        y = -y;
+        z = -z;
+
+        return this;
+    }
+
+    /**
+     * Returns a new instance of a conjugated Quaternion.
+     *
+     * @return A new conjugated instance.
+     */
+    public Quaternion getConjugated()
+    {
+        return new Quaternion(-x, -y, -z, w);
+    }
+
+    /**
      * Converts a rotation around angle axis into a Quaternion. This Operation affects the Quaternion and changes data.
      *
      * @param angle The rotation in degrees around the axis.
@@ -196,9 +221,10 @@ public class Quaternion
         final float sin3 = (float) Math.sin(zRad2);
 
         w = (cos1 * cos2 * cos3 - sin1 * sin2 * sin3);
-        x = (sin1 * sin2 * cos3 + cos1 * cos2 * sin3);
+
         y = (cos1 * sin2 * cos3 - sin1 * cos2 * sin3);
-        z = (sin1 * cos2 * cos3 + cos1 * sin2 * sin3);
+        x = (sin1 * cos2 * cos3 + cos1 * sin2 * sin3);
+        z = (sin1 * sin2 * cos3 + cos1 * cos2 * sin3);
 
         return this;
     }

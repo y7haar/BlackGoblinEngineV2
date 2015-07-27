@@ -125,6 +125,16 @@ public class Matrix4x4
     }
 
     /**
+     * Invertes the Matrix. This operation affects the Matrix and updates its elements.
+     * @return An instance of the inverted Matrix.
+     */
+    public Matrix4x4 inverse()
+    {
+        //TODO: Implement
+        return this;
+    }
+
+    /**
      * Performs an addition with another Matrix. This operation returns a new Matrix which contains the calculated data.
      *
      * @param rhs Right hand side argument for addition.
@@ -158,7 +168,7 @@ public class Matrix4x4
     }
 
     /**
-     * Performs an multiplication with another Matrix. This operation returns a new Matrix which contains the calculated data.
+     * Performs a multiplication with another Matrix. This operation returns a new Matrix which contains the calculated data.
      *
      * @param rhs Right hand side argument for multiplication.
      * @return A new Matrix which contains the result.
@@ -191,6 +201,24 @@ public class Matrix4x4
         }
 
         return new Matrix4x4(newMat);
+    }
+
+    /**
+     * Performs a multiplication with another Vector4. This operation returns a new Vector4 which contains the calculated data.
+     *
+     * @param rhs Right hand side argument for multiplication.
+     * @return A new Vector4 which contains the result.
+     */
+    public Vector4 mul(final Vector4 rhs)
+    {
+        final Vector4 newVec = new Vector4();
+
+        newVec.x = mat[0][0] * rhs.x + mat[0][1] * rhs.y + mat[0][2] * rhs.z + mat[0][3] * rhs.w;
+        newVec.y = mat[1][0] * rhs.x + mat[1][1] * rhs.y + mat[1][2] * rhs.z + mat[1][3] * rhs.w;
+        newVec.z = mat[2][0] * rhs.x + mat[2][1] * rhs.y + mat[2][2] * rhs.z + mat[2][3] * rhs.w;
+        newVec.w = mat[3][0] * rhs.x + mat[3][1] * rhs.y + mat[3][2] * rhs.z + mat[3][3] * rhs.w;
+
+        return newVec;
     }
 
     /**
@@ -314,7 +342,7 @@ public class Matrix4x4
     public Matrix4x4 getPerspectiveProjection(final float fov, final float aspectRatio, final float zNear, final float zFar)
     {
         final float zRange = zNear - zFar;
-        final float tanOfFov2 = (float) Math.tan(Math.toRadians(fov / 2));
+        final float tanOfFov2 = (float) Math.tan(Math.toRadians(fov / 2.0));
 
         mat[0][0] = 1.0f / (tanOfFov2 * aspectRatio);
         mat[0][1] = 0.0f;
@@ -335,6 +363,47 @@ public class Matrix4x4
         mat[3][1] = 0.0f;
         mat[3][2] = 1.0f;
         mat[3][3] = 0.0f;
+
+        return this;
+    }
+
+    /**
+     * Calculates LookAt Matrix for specified target. Up represents the orientation to up.
+     *
+     * @param target The target to look at.
+     * @param up     Up.
+     * @return Calculated LookAt Matrix.
+     */
+    public Matrix4x4 getLookAt(Vector3 target, Vector3 up)
+    {
+        Vector3 n = new Vector3(target);
+        n.normalize();
+
+        Vector3 u = new Vector3(up);
+        u.normalize();
+        u = u.cross(target);
+
+        Vector3 lookAt = n.cross(u);
+
+        mat[0][0] = u.x;
+        mat[0][1] = lookAt.y;
+        mat[0][2] = n.z;
+        mat[0][3] = 0.0f;
+
+        mat[1][0] = u.x;
+        mat[1][1] = lookAt.y;
+        mat[1][2] = n.z;
+        mat[1][3] = 0.0f;
+
+        mat[2][0] = u.x;
+        mat[2][1] = lookAt.y;
+        mat[2][2] = n.z;
+        mat[2][3] = 0.0f;
+
+        mat[3][0] = 0.0f;
+        mat[3][1] = 0.0f;
+        mat[3][2] = 0.0f;
+        mat[3][3] = 1.0f;
 
         return this;
     }

@@ -35,7 +35,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class Engine
 {
-    private static Engine instance = new Engine();
+    private static Engine instance;
 
     private RenderController renderController;
 
@@ -48,6 +48,9 @@ public class Engine
 
     public static Engine getInstance()
     {
+        if (instance == null)
+            instance = new Engine();
+
         return instance;
     }
 

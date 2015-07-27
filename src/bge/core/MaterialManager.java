@@ -64,7 +64,9 @@ public class MaterialManager
             materials.put(material.getName(), material);
 
             //TODO: Find better place to set values
-            material.addValue("transform");
+            material.addValue("model");
+            material.addValue("view");
+            material.addValue("projection");
         }
     }
 

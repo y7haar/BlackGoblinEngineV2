@@ -68,6 +68,16 @@ public class Vector2
     }
 
     /**
+     * Copy Constructor for getting a new Vector with same values.
+     * @param vector The Vector to copy from.
+     */
+    public Vector2(Vector2 vector)
+    {
+        this.x = vector.x;
+        this.y = vector.y;
+    }
+
+    /**
      * Setter method to set all values of the Vector. If you want to set a single value, use the public property.
      *
      * @param x The x component of a Vector.
@@ -172,6 +182,19 @@ public class Vector2
     }
 
     /**
+     * Negates the Vector. All values are multiplied with -1.
+     * This Operation affects the Vector and changes data.
+     * @return The updated instance.
+     */
+    public Vector2 negate()
+    {
+        x = -x;
+        y = -y;
+
+        return this;
+    }
+
+    /**
      * Returns a new instance of the normalized Vector.
      * Normalizing means dividing all components (x, y) by the length of a Vector.
      * This Operation does not affects the Vector.
@@ -185,6 +208,18 @@ public class Vector2
         float newY = y / length;
 
         return new Vector2(newX, newY);
+    }
+
+    /**
+     * Returns a new instance of the negated Vector.
+     * All components are multiplied with -1.
+     * This Operation does not affects the Vector.
+     *
+     * @return A new instance of the negated Vector.
+     */
+    public Vector2 getNegated()
+    {
+        return new Vector2(-x, -y);
     }
 
     /**

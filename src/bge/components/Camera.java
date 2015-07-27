@@ -22,35 +22,48 @@
 
 package bge.components;
 
+import bge.core.Color;
 import bge.core.Engine;
 import bge.math.Matrix4x4;
+
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Created by Yannic Siebenhaar on 24.07.2015.
  */
 public class Camera
 {
-    private Matrix4x4 projectionMatrix;
-    private Transform transform;
+    private CameraTransform transform;
+    private Color backgroundColor;
 
     public Camera()
     {
-        this.projectionMatrix = new Matrix4x4().getPerspectiveProjection(60.0f, 4.0f / 3.0f, 1.0f, 100.0f);
-        this.transform = new Transform();
+        this.transform = new CameraTransform();
+
+        setBackgroundColor(new Color(0.075f, 0.191f, 0.506f, 1.0f));
     }
 
-    public Matrix4x4 getProjectionMatrix()
+    public void update()
     {
-        return projectionMatrix;
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void setProjectionMatrix(Matrix4x4 projectionMatrix)
+
+    // Getter and Setter
+
+    public CameraTransform getTransform()
     {
-        this.projectionMatrix = projectionMatrix;
+        return this.transform;
     }
 
-    public Matrix4x4 getViewMatrix()
+    public Color getBackgroundColor()
     {
-        return transform.getTransformMatrix();
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(Color backgroundColor)
+    {
+        this.backgroundColor = backgroundColor;
+        glClearColor(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(), backgroundColor.getAlpha());
     }
 }

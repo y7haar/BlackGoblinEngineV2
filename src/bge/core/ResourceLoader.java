@@ -108,10 +108,11 @@ public class ResourceLoader
         return new ShaderPart(readText(directory), type);
     }
 
-    public Mesh loadMesh()
+    public Mesh loadMesh(String directory)
     {
-        //TODO: Implement parser for Obj Files
-        return null;
+        ObjFormatParser parser = new ObjFormatParser(readText(directory));
+
+        return parser.parse();
     }
 
     // TODO: Other Types

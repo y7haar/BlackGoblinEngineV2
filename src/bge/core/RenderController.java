@@ -22,6 +22,7 @@
 
 package bge.core;
 
+import bge.components.Camera;
 import bge.components.EngineComponent;
 import bge.components.GameObject;
 
@@ -35,12 +36,19 @@ import static org.lwjgl.opengl.GL30.*;
  */
 public class RenderController extends EngineComponent
 {
-    private static RenderController instance = new RenderController();
+    private static RenderController instance;
 
     private ArrayList<GameObject> gameObjects;
+    private ArrayList<Camera> cameras;
+
+    private Camera currentCamera;
+    private Material currentMaterial;
 
     public static RenderController getInstance()
     {
+        if (instance == null)
+            instance = new RenderController();
+
         return instance;
     }
 
@@ -51,27 +59,39 @@ public class RenderController extends EngineComponent
     @Override
     public void init()
     {
-        // TODO: do clearColor in Camera class
-        glClearColor(0.075f, 0.191f, 0.506f, 1.0f);
-
         glFrontFace(GL_CW);
         glCullFace(GL_BACK);
         glEnable(GL_CULL_FACE);
+
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_FRAMEBUFFER_SRGB);
 
         gameObjects = new ArrayList<>();
+        cameras = new ArrayList<>(1);
+
+        currentCamera = null;
+        currentMaterial = null;
+    }
+
+    public void addCamera(Camera camera)
+    {
+        cameras.add(camera);
     }
 
     @Override
     public void update()
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        for (GameObject o : gameObjects)
+        for (Camera c : cameras)
         {
-            o.update();
+            currentCamera = c;
+            c.update();
+
+            for (GameObject o : gameObjects)
+            {
+                o.update();
+            }
         }
+
     }
 
     @Override
@@ -83,5 +103,20 @@ public class RenderController extends EngineComponent
     public void addGameObject(GameObject o)
     {
         gameObjects.add(o);
+    }
+
+    public Camera getCurrentCamera()
+    {
+        return currentCamera;
+    }
+
+    public Material getCurrentMaterial()
+    {
+        return currentMaterial;
+    }
+
+    public void setCurrentMaterial(Material currentMaterial)
+    {
+        this.currentMaterial = currentMaterial;
     }
 }

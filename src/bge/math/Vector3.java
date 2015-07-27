@@ -80,6 +80,17 @@ public class Vector3
     }
 
     /**
+     * Copy Constructor for getting a new Vector with same values.
+     * @param vector The Vector to copy from.
+     */
+    public Vector3(Vector3 vector)
+    {
+        this.x = vector.x;
+        this.y = vector.y;
+        this.z = vector.z;
+    }
+
+    /**
      * Setter method to set all values of the Vector. If you want to set a single value, use the public property.
      *
      * @param x The x component of a Vector.
@@ -184,6 +195,33 @@ public class Vector3
         z /= length;
 
         return this;
+    }
+
+    /**
+     * Negates the Vector. All values are multiplied with -1.
+     * This Operation affects the Vector and changes data.
+     *
+     * @return The updated instance.
+     */
+    public Vector3 negate()
+    {
+        x = -x;
+        y = -y;
+        z = -z;
+
+        return this;
+    }
+
+    /**
+     * Returns a new instance of the negated Vector.
+     * All components are multiplied with -1.
+     * This Operation does not affects the Vector.
+     *
+     * @return A new instance of the negated Vector.
+     */
+    public Vector3 getNegated()
+    {
+        return new Vector3(-x, -y, -z);
     }
 
     /**

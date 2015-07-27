@@ -67,14 +67,16 @@ public class Mesh extends RenderContent
             this.vertexBuffer.put(v.getPosition().y);
             this.vertexBuffer.put(v.getPosition().z);
         }
+
         this.vertexBuffer.flip();
 
 
         indexBuffer.put(indices);
+
         indexBuffer.flip();
 
         glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-        glBufferData(GL_ARRAY_BUFFER, this.vertexBuffer, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBuffer, GL_STATIC_DRAW);
@@ -86,7 +88,7 @@ public class Mesh extends RenderContent
         glEnableVertexAttribArray(0);
 
         glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE * Float.BYTES, 0);
+        glVertexAttribPointer(0, Vertex.SIZE, GL_FLOAT, false, Vertex.SIZE * Float.BYTES, 0);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
         glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);

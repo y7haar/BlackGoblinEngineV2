@@ -20,41 +20,57 @@
  * THE SOFTWARE.
  */
 
-package bge.components;
-
-import bge.core.RenderController;
+package bge.core;
 
 /**
- * Created by Yannic Siebenhaar on 25.07.2015.
+ * Created by Yannic Siebenhaar on 26.07.2015.
  */
-public class MeshRenderer extends Renderer
+public class InputKey
 {
-    public MeshRenderer(GameObject gameObject)
+    private boolean down;
+    private boolean up;
+    private boolean pressed;
+    private int keyCode;
+
+    public InputKey(int keyCode)
     {
-        super(gameObject);
+        this.keyCode = keyCode;
+        down = false;
+        up = false;
     }
 
-    @Override
-    public void render()
+    public boolean isDown()
     {
-        if (RenderController.getInstance().getCurrentMaterial() != this.getMaterial())
-        {
-            RenderController.getInstance().setCurrentMaterial(this.getMaterial());
-            this.getMaterial().use();
-        }
-
-        //this.getMaterial().use();
-
-        this.getMaterial().setMatrix4x4("model", this.getGameObject().getTransform().getTransformMatrix());
-        this.getMaterial().setMatrix4x4("view", RenderController.getInstance().getCurrentCamera().getTransform().getViewMatrix());
-        this.getMaterial().setMatrix4x4("projection", RenderController.getInstance().getCurrentCamera().getTransform().getProjectionMatrix());
-
-        getRenderContent().render();
+        return down;
     }
 
-    @Override
-    public void update()
+    public void setDown(boolean down)
     {
-        render();
+        this.down = down;
+    }
+
+    public boolean isUp()
+    {
+        return up;
+    }
+
+    public void setUp(boolean up)
+    {
+        this.up = up;
+    }
+
+    public boolean isPressed()
+    {
+        return pressed;
+    }
+
+    public void setPressed(boolean pressed)
+    {
+        this.pressed = pressed;
+    }
+
+    public int getKeyCode()
+    {
+        return keyCode;
     }
 }

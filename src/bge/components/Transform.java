@@ -35,10 +35,6 @@ public class Transform extends Component
     private Quaternion rotation;
     private Vector3 scale;
 
-    private Vector3 oldPosition;
-    private Quaternion oldRotation;
-    private Vector3 oldScale;
-
     private Matrix4x4 translationMatrix;
     private Matrix4x4 rotationMatrix;
     private Matrix4x4 scalingMatrix;
@@ -62,10 +58,6 @@ public class Transform extends Component
         this.position = new Vector3();
         this.rotation = new Quaternion(0, 0, 0, 1);
         this.scale = new Vector3(1, 1, 1);
-
-        this.oldPosition = new Vector3();
-        this.oldRotation = new Quaternion(0, 0, 0, 1);
-        this.oldScale = new Vector3(1, 1, 1);
 
         this.translationMatrix = new Matrix4x4();
         this.rotationMatrix = new Matrix4x4();
@@ -115,6 +107,19 @@ public class Transform extends Component
         this.rotation = rotation.mul(newRotation);
     }
 
+    public void rotate(Vector3 euler, boolean world)
+    {
+        if (!world)
+        {
+            Quaternion newRotation = new Quaternion().fromEulerAngles(euler);
+            this.rotation = rotation.mul(newRotation);
+        } else
+        {
+            //TODO: Implement local rotation
+        }
+
+    }
+
     public void scale(Vector3 scale)
     {
         this.scale = this.scale.add(scale);
@@ -129,7 +134,7 @@ public class Transform extends Component
         rotationMatrix.getRotation(rotation);
         scalingMatrix.getScaling(scale);
 
-        this.transformMatrix = transformMatrix.mul(translationMatrix).mul(scalingMatrix).mul(rotationMatrix);
+        this.transformMatrix = transformMatrix.mul(translationMatrix).mul(rotationMatrix).mul(scalingMatrix);
 
         return this.transformMatrix;
     }
