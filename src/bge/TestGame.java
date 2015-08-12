@@ -45,16 +45,15 @@ public class TestGame
     public TestGame()
     {
         camera = new Camera();
-        camera.setBackgroundColor(Color.WHITE);
         RenderController.getInstance().addCamera(camera);
 
         g1 = new GameObject();
         g2 = new GameObject();
 
 
-        //mesh = ResourceLoader.getInstance().loadMesh("game/models/m.obj");
+        mesh = ResourceLoader.getInstance().loadMesh("game/models/cone.obj");
 
-        mesh = new Mesh();
+        //mesh = new Mesh();
         sl = ResourceLoader.getInstance();
         material = sl.loadMaterialPackage("game/shader/basic");
 
@@ -74,7 +73,7 @@ public class TestGame
                 1, 3, 4};
 
 
-        mesh.addVertices(vertices, indices);
+        //mesh.addVertices(vertices, indices);
 
         g1.getRenderer().setRenderContent(mesh);
         g1.getRenderer().setMaterial(material);
@@ -97,6 +96,7 @@ public class TestGame
                 go.getRenderer().setMaterial(material);
 
                 go.getTransform().setPosition(new Vector3(5 * i, 0, 5 * j));
+                //go.getTransform().rotate(new Vector3((float) Math.random() * 180, (float) Math.random() * 180, (float) Math.random() * 180));
 
                 RenderController.getInstance().addGameObject(go);
             }
@@ -139,10 +139,6 @@ public class TestGame
 
         if (Input.getKey("down"))
             camera.getTransform().rotate(Vector3.RIGHT.mul(100).mul(Time.getDelta()));
-
-        //g1.getTransform().rotate(Vector3.LEFT.mul(Time.getDelta() * 100.0f));
-        //g2.getTransform().rotate(new Vector3(0, 400 * Time.getDelta(), 0));
-        //g2.getTransform().translate(Vector3.LEFT.mul(Time.getDelta()));
     }
 
 }

@@ -55,7 +55,7 @@ public class Window extends EngineComponent
 
     public Window()
     {
-        this(800, 600, "Black Goblin Engine");
+        this(1024, 768, "Black Goblin Engine");
     }
 
     public int getWidth()

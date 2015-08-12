@@ -35,6 +35,12 @@ public class Transform extends Component
     private Quaternion rotation;
     private Vector3 scale;
 
+    private Vector3 up;
+    private Vector3 right;
+    private Vector3 forward;
+
+    private boolean transformUpdated;
+
     private Matrix4x4 translationMatrix;
     private Matrix4x4 rotationMatrix;
     private Matrix4x4 scalingMatrix;
@@ -59,6 +65,12 @@ public class Transform extends Component
         this.rotation = new Quaternion(0, 0, 0, 1);
         this.scale = new Vector3(1, 1, 1);
 
+        this.up = new Vector3(Vector3.UP);
+        this.right = new Vector3(Vector3.RIGHT);
+        this.forward = new Vector3(Vector3.FORWARD);
+
+        this.transformUpdated = true;
+
         this.translationMatrix = new Matrix4x4();
         this.rotationMatrix = new Matrix4x4();
         this.scalingMatrix = new Matrix4x4();
@@ -73,6 +85,7 @@ public class Transform extends Component
     public void setPosition(Vector3 position)
     {
         this.position = position;
+        this.transformUpdated = true;
     }
 
     public Quaternion getRotation()
@@ -83,6 +96,7 @@ public class Transform extends Component
     public void setRotation(Quaternion rotation)
     {
         this.rotation = rotation;
+        this.transformUpdated = true;
     }
 
     public Vector3 getScale()
@@ -93,18 +107,22 @@ public class Transform extends Component
     public void setScale(Vector3 scale)
     {
         this.scale = scale;
+        this.transformUpdated = true;
     }
 
 
     public void translate(Vector3 translation)
     {
         this.position = this.position.add(translation);
+        this.transformUpdated = true;
     }
 
     public void rotate(Vector3 euler)
     {
         Quaternion newRotation = new Quaternion().fromEulerAngles(euler);
         this.rotation = rotation.mul(newRotation);
+
+        this.transformUpdated = true;
     }
 
     public void rotate(Vector3 euler, boolean world)
@@ -115,26 +133,39 @@ public class Transform extends Component
             this.rotation = rotation.mul(newRotation);
         } else
         {
+
             //TODO: Implement local rotation
         }
 
+        this.transformUpdated = true;
     }
 
     public void scale(Vector3 scale)
     {
         this.scale = this.scale.add(scale);
+
+        this.transformUpdated = true;
+    }
+
+    public void lookAt(Vector3 target, Vector3 up)
+    {
+
     }
 
 
     public Matrix4x4 getTransformMatrix()
     {
-        this.transformMatrix.identity();
+        if(transformUpdated)
+        {
+            translationMatrix.getTranslation(position);
+            rotationMatrix.getRotation(rotation);
+            scalingMatrix.getScaling(scale);
 
-        translationMatrix.getTranslation(position);
-        rotationMatrix.getRotation(rotation);
-        scalingMatrix.getScaling(scale);
+            this.transformMatrix.identity();
+            this.transformMatrix = transformMatrix.mul(translationMatrix).mul(rotationMatrix).mul(scalingMatrix);
 
-        this.transformMatrix = transformMatrix.mul(translationMatrix).mul(rotationMatrix).mul(scalingMatrix);
+            transformUpdated = false;
+        }
 
         return this.transformMatrix;
     }

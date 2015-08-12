@@ -295,6 +295,11 @@ public class Vector3
         return new Vector3(rhs.x, rhs.y, 0.0f);
     }
 
+    public boolean equals(Vector3 rhs)
+    {
+        return (x == rhs.x && y == rhs.y && z == rhs.z);
+    }
+
     /**
      * Converts Vector3 into a String. Useful for debugging.
      * @return The converted String.

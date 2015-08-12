@@ -105,13 +105,19 @@ public class ObjFormatParser
             if (s.startsWith("vn"))
             {
                 parseVertexNormal(s);
-            } else if (s.startsWith("vt"))
+            }
+
+            else if (s.startsWith("vt"))
             {
                 parseVertexTexture(s);
-            } else if (s.startsWith("v"))
+            }
+
+            else if (s.startsWith("v"))
             {
                 parseVertex(s);
-            } else if (s.startsWith("f"))
+            }
+
+            else if (s.startsWith("f"))
             {
                 parseFace(s);
             }

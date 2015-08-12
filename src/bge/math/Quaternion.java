@@ -229,6 +229,11 @@ public class Quaternion
         return this;
     }
 
+    public boolean equals(Quaternion rhs)
+    {
+        return (x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w);
+    }
+
     /**
      * Converts Quaternion into a String. Useful for debugging.
      * @return The converted String.
