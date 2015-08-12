@@ -20,41 +20,46 @@
  * THE SOFTWARE.
  */
 
-package bge.rendering;
+package bge.components;
+
+import bge.core.Vertex;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 import static org.lwjgl.BufferUtils.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 /**
  * Created by Yannic Siebenhaar on 23.07.2015.
  */
-public class Mesh
+public class Mesh extends RenderContent
 {
     private int vertexBufferObject;
-    private int vao;
+    private int indexBufferObject;
+
     private FloatBuffer vertexBuffer;
+    private IntBuffer indexBuffer;
+
     private int size;
 
     public Mesh()
     {
-        this.vao = glGenVertexArrays();
         this.vertexBufferObject = glGenBuffers();
+        this.indexBufferObject = glGenBuffers();
         this.vertexBuffer = null;
+        this.indexBuffer = null;
         this.size = 0;
     }
 
-    public void addVertices(Vertex[] vertices)
+    public void addVertices(Vertex[] vertices, int[] indices)
     {
-        glBindVertexArray(vao);
+        size = indices.length;
 
         this.vertexBuffer = createFloatBuffer(vertices.length * Vertex.SIZE);
-        size = vertices.length;
+        this.indexBuffer = createIntBuffer(indices.length);
 
         for (Vertex v : vertices)
         {
@@ -62,20 +67,33 @@ public class Mesh
             this.vertexBuffer.put(v.getPosition().y);
             this.vertexBuffer.put(v.getPosition().z);
         }
+
         this.vertexBuffer.flip();
 
+
+        indexBuffer.put(indices);
+
+        indexBuffer.flip();
+
+        System.out.println(indexBuffer.toString());
+
         glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-        glBufferData(GL_ARRAY_BUFFER, this.vertexBuffer, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBuffer, GL_STATIC_DRAW);
     }
 
+    @Override
     public void render()
     {
         glEnableVertexAttribArray(0);
 
         glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE * Float.BYTES, 0);
+        glVertexAttribPointer(0, Vertex.SIZE, GL_FLOAT, false, Vertex.SIZE * Float.BYTES, 0);
 
-        glDrawArrays(GL_TRIANGLES, 0, size);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
+        glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
 
         glDisableVertexAttribArray(0);
     }
